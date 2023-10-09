@@ -21,6 +21,9 @@ app.set('view engine', 'ejs');
 // Routers
 const authRouter = require('./src/routes/auth');
 app.use("/auth", authRouter);
+
+const apiRouter = require('./src/routes/api/api');
+app.use("/api", apiRouter);
 /***/
 
 app.get('/', validateToken, (req, res) => {
