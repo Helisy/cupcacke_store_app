@@ -3,13 +3,13 @@ require('dotenv').config();
 const { verify } = require('jsonwebtoken');
 
 
-//Verifies if the the acessToken in the cookies is valid.
+//Verifies if the the accessToken in the cookies is valid.
 const validateToken = (req, res, next) => {
-    const acessToken = req.cookies.acessToken;
+    const accessToken = req.cookies.accessToken;
 
-    if(!acessToken) return res.redirect('/auth/login');
+    if(!accessToken) return res.redirect('/auth/login');
 
-    verify(acessToken, process.env.TOKEN_SECRETE, (err, user) =>{
+    verify(accessToken, process.env.TOKEN_SECRETE, (err, user) =>{
         if (err) return res.sendStatus(403);
         req.user = user;
         return next();
@@ -18,11 +18,11 @@ const validateToken = (req, res, next) => {
 
 //Verifies is the user is already logged.
 const isAuthenticated = (req, res, next) => {
-    const acessToken = req.cookies.acessToken;
+    const accessToken = req.cookies.accessToken;
 
-    if(!acessToken) return next();
+    if(!accessToken) return next();
 
-        verify(acessToken, process.env.TOKEN_SECRETE, (err, user) =>{
+        verify(accessToken, process.env.TOKEN_SECRETE, (err, user) =>{
         if (err) return res.sendStatus(403);
         req.user = user;
         res.redirect('/');
@@ -30,14 +30,16 @@ const isAuthenticated = (req, res, next) => {
 }
 
 const verifyToken = (req, res, next) => {
-    const acessToken = req.headers['token'] || req.cookies.acessToken;
+    const accessToken = req.headers['token'] || req.cookies.accessToken;
 
-    if(acessToken === undefined) return res.status(401).json({
+    if(accessToken === undefined) return res.status(401).json({
         method: req.method,
         error: true,
         code: 401,
-        message: "An acess token is needed to access this resource.",
-        details: result.array(),
+        message: "An access token is needed to access this resource.",
+        details: [
+
+        ],
         hints: [
             "Provide an access token by the header key 'token'"
         ],
@@ -45,13 +47,15 @@ const verifyToken = (req, res, next) => {
         ]
     });
 
-    verify(acessToken, process.env.TOKEN_SECRETE, (err, user) =>{
+    verify(accessToken, process.env.TOKEN_SECRETE, (err, user) =>{
         if (err) return res.status(403).json({
             method: req.method,
             error: true,
             code: 401,
             message: "The access token provided is invalid.",
-            details: result.array(),
+            details: [
+
+            ],
             hints: [
             ],
             links: [

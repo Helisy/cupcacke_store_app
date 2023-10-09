@@ -19,4 +19,7 @@ router.get('/', (req, res) => {
 const authRouter = require('./auth.js');
 router.use("/auth", authRouter);
 
+const cupcakeRouter = require('./cupcake.js');
+router.use("/cupcake", cupcakeRouter);
+
 module.exports = router;
