@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 var db = null;
 
 module.exports = function () {

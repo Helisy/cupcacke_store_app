@@ -29,4 +29,16 @@ const isAuthenticated = (req, res, next) => {
     });
 }
 
-module.exports = { validateToken, isAuthenticated };
+const verifyToken = (req, res, next) => {
+    const acessToken = req.headers['token'] || req.cookies.acessToken;
+
+    if(acessToken === undefined) return res.status(400).json({error: "You need to serve an acess token to access this resource"});
+
+    verify(acessToken, process.env.TOKEN_SECRETE, (err, user) =>{
+        if (err) return res.status(403).json({error: "The acess token is invalid"});
+        req.user = user;
+        return next();
+    });
+}
+
+module.exports = { validateToken, isAuthenticated, verifyToken };
