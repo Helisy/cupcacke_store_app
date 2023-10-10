@@ -7,7 +7,6 @@ const database = require('../../database');
 const db = database();
 
 const { isAuthenticated } = require('../../middleware/authMiddleware');
-const { response } = require('express');
 
 router.get('/', (req, res) => {
     res.status(200).json(

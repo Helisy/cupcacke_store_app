@@ -1,9 +1,6 @@
 require('dotenv').config();
 
-const { checkSchema, validationResult } = require('express-validator');
-
-const bcrypt = require('bcrypt');
-const { sign } = require('jsonwebtoken');
+const { checkSchema, validationResult, param } = require('express-validator');
 
 const express = require('express');
 const router = express.Router();
@@ -12,44 +9,11 @@ const database = require('../../../database');
 const db = database();
 
 const { verifyToken } = require('../../../middleware/authMiddleware');
-const { response } = require('express');
 
 
-router.get('/', verifyToken, async (req, res) => {
-
-    const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
-
-    var data = rows_1;
-
-    for (let i = 0; i < rows_1.length; i++) {
-        const [dough] = await db.execute(`select * from ingredients where id = ${rows_1[i].dough}`);
-        const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[i].filling}`);
-        const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[i].cover}`);
-        const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[i].decoration}`);
-
-        data[i].dough = dough[0];
-        data[i].filling = filling[0];
-        data[i].cover = cover[0];
-        data[i].decoration = decoration[0];
-
-    }
-
-    res.status(200).json(
-        {
-            method: "GET",
-            error: false,
-            code: 200,
-            message: "",
-            data: data,
-            links: [
-            ]
-        }
-    );
-});
-
-//next routs
 
 router.get('/', verifyToken, async (req, res) => {
+    //DO search
 
     const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
 
@@ -67,6 +31,114 @@ router.get('/', verifyToken, async (req, res) => {
         data[i].decoration = decoration[0];
     }
 
+    res.status(200).json(
+        {
+            method: "GET",
+            error: false,
+            code: 200,
+            message: "",
+            data: data,
+            links: [
+                {
+                    href: "/api/v1/cupcake/:id",
+                    method: "GET"
+                },
+                {
+                    href: "/api/v1/cupcake",
+                    method: "POST"
+                },
+            ]
+        }
+    );
+});
+
+
+	
+
+const registerValidation = require("../../../validation/cupcake/register_cupcake");
+
+router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
+    const {name, description, dough_id, filling_id, cover_id, decoration_id } = req.body;
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.json({
+            method: "POST",
+            error: true,
+            code: 400,
+            message: "Incorrect entry.",
+            details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+    await db.execute(`insert into cupcakes(name, description, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?);`, [name, description, dough_id, filling_id, cover_id, decoration_id])
+
+    res.status(200).json(
+        {
+            method: "GET",
+            error: false,
+            code: 201,
+            message: "New cupcake created sucessfully",
+            links: [
+            ]
+        }
+    );
+});
+
+
+
+router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
+    const id = req.params.id;
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 400,
+            message: "Incorrect param entry.",
+            details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+    const [rows_1] = await db.execute(`select * from cupcakes where id = ${id}`)
+
+    if(rows_1.length < 1){
+       return res.status(200).json(
+        {
+            method: "GET",
+            error: false,
+            code: 200,
+            message: "",
+            data: data,
+            links: [
+            ]
+        }
+    );
+    }
+
+    var data = rows_1[0];
+
+    const [dough] = await db.execute(`select * from ingredients where id = ${rows_1[0].dough}`);
+    const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[0].filling}`);
+    const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[0].cover}`);
+    const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[0].decoration}`);
+
+    data.dough = dough[0];
+    data.filling = filling[0];
+    data.cover = cover[0];
+    data.decoration = decoration[0];
+
 
     res.status(200).json(
         {
@@ -80,6 +152,39 @@ router.get('/', verifyToken, async (req, res) => {
         }
     );
 });
+
+router.get('/', verifyToken, async (req, res) => {
+
+    const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
+
+    var data = rows_1;
+
+    for (let i = 0; i < rows_1.length; i++) {
+        const [dough] = await db.execute(`select * from ingredients where id = ${rows_1[i].dough}`);
+        const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[i].filling}`);
+        const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[i].cover}`);
+        const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[i].decoration}`);
+
+        data[i].dough = dough[0];
+        data[i].filling = filling[0];
+        data[i].cover = cover[0];
+        data[i].decoration = decoration[0];
+    }
+
+
+    res.status(200).json(
+        {
+            method: "GET",
+            error: false,
+            code: 200,
+            message: "",
+            data: data,
+            links: [
+            ]
+        }
+    );
+});
+
 
 
 

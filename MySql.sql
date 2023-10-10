@@ -15,7 +15,7 @@ select * from users;
 create table cupcakes(
 id int not null auto_increment,
 name varchar(255) not null,
-description varchar(255) not null,
+description varchar(255),
 dough int not null,
 filling int not null,
 cover int not null,
@@ -62,3 +62,5 @@ insert into ingredients(type, name, ingredients, weight, calories, nutritional_i
 insert into ingredients(type, name, ingredients, weight, calories, nutritional_info) values("decoration", "Estrelinhas", "Açucar, corante", 3, 15, "");
 
 select * from ingredients;
+
+

@@ -22,4 +22,7 @@ router.use("/auth", authRouter);
 const cupcakeRouter = require('./cupcake.js');
 router.use("/cupcake", cupcakeRouter);
 
+const ingredientRouter = require('./ingredient.js');
+router.use("/ingredient", ingredientRouter);
+
 module.exports = router;
