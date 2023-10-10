@@ -23,7 +23,7 @@ module.exports = {
             errorMessage: 'Empty field.',
         },
         matches: {
-            options: [/[A-Za-z]+$/, 'g'],
+            options: [/[A-Za-z\s]+$/, 'g'],
             errorMessage: 'The value lastName must not have especial characters and numbers.',
         }
     },

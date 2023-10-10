@@ -65,8 +65,8 @@ router.post('/register', checkSchema(registerValidation), async (req, res) => {
             method: "POST",
             error: true,
             code: 400,
-            message: "The value for email field is already registed.",
-            details: []
+            message: "Incorrect field entry.",
+            details: result.array()
             ,
             hints: [
             ],
