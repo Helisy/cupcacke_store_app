@@ -40,9 +40,11 @@ router.get('/', verifyToken, async (req, res) => {
 const registerValidation = require("../../../validation/ingredient/register_ingredients");
 
 router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
-    var { type, name, ingredients, weight, calories, nutritional_info, theme } = req.body;
+    var { type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme } = req.body;
 
     if(!theme) theme = null;
+    if(!contains_allergens) contains_allergens = 1;
+    if(!is_vegan) is_vegan = 0;
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -60,7 +62,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
         })
     }
 
-    await db.execute(`insert into ingredients(type, name, ingredients, weight, calories, nutritional_info, theme) values(?, ?, ?, ?, ?, ?, ?);`, [type, name, ingredients, weight, calories, nutritional_info, theme])
+    await db.execute(`insert into ingredients(type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme])
 
     res.status(200).json(
         {
