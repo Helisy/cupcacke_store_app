@@ -26,8 +26,11 @@ const apiRouter = require('./src/routes/api/api');
 app.use("/api", apiRouter);
 /***/
 
+const fs = require('fs');
+var banners = fs.readdirSync("./public/images/banner")
+banners = banners.map(banner => {return banner = "public/images/banner/" + banner})
 app.get('/', (req, res) => {
-    res.render('template.ejs');
+    res.render('home/home.ejs', {banners: banners});
 });
 
 app.listen(PORT, () => {
