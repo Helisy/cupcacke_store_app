@@ -26,8 +26,8 @@ const apiRouter = require('./src/routes/api/api');
 app.use("/api", apiRouter);
 /***/
 
-app.get('/', validateToken, (req, res) => {
-    res.render('index.ejs', {userName: req.user.firstName});
+app.get('/', (req, res) => {
+    res.render('template.ejs');
 });
 
 app.listen(PORT, () => {

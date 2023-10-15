@@ -1,0 +1,120 @@
+nav
+{
+    position: fixed;
+    width: 100%;
+    background-color: white;
+}
+
+nav > div:nth-child(1)
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    border-bottom: 1px solid #f7f7f7;
+    padding: 0 5rem;
+    
+}
+
+nav > div:nth-child(1) > div
+{
+    width: 8%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.numbered-icon > label
+{
+    background-color: red;
+    border-radius: 100%;
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -.5rem;
+    right: -.5rem;
+    color: white;
+    font-weight: 600;
+}
+
+nav i
+{
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+nav > div:nth-child(2)
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4rem;
+    padding: 0 5rem;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+}
+
+.search-bar
+{
+    background-color: rgb(236, 236, 236);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 1rem;
+    border-radius: 5rem;
+    height: 70%;
+    width: 50%;
+    transition: .1s ease;
+}
+
+.search-bar:focus-within
+{
+    outline: 2px solid black;
+}
+
+.search-bar > input
+{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding-left: 1rem;
+    width: auto;
+    width: 100%;
+}
+
+.search-bar > i
+{
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 600px) 
+{
+    nav i
+    {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    nav > div:nth-child(1)
+    {
+        padding: 0 1rem;
+    }
+
+    nav > div:nth-child(1) > div
+    {
+        width: 20%;
+    }
+
+    nav > div:nth-child(2)
+    {
+        padding: 0 1rem;
+    }
+
+    .search-bar
+    {
+        width: 100%;
+    }
+
+}
