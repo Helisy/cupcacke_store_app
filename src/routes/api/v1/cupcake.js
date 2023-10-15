@@ -25,6 +25,12 @@ router.get('/', verifyToken, async (req, res) => {
         const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[i].cover}`);
         const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[i].decoration}`);
 
+        data[i].selling_price = dough[0].selling_price + filling[0].selling_price + cover[0].selling_price + dough[0].selling_price;
+        data[i].cost_price = dough[0].cost_price + filling[0].cost_price + cover[0].cost_price + dough[0].cost_price;
+
+        data[i].weight = dough[0].weight + filling[0].weight + cover[0].weight + dough[0].weight;
+        data[i].calories = dough[0].calories + filling[0].calories + cover[0].calories + dough[0].calories;
+
         data[i].dough = dough[0];
         data[i].filling = filling[0];
         data[i].cover = cover[0];
@@ -80,7 +86,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     res.status(200).json(
         {
-            method: "GET",
+            method: "POST",
             error: false,
             code: 201,
             message: "New cupcake created sucessfully",
@@ -133,6 +139,12 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
     const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[0].filling}`);
     const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[0].cover}`);
     const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[0].decoration}`);
+
+    data.selling_price = dough[0].selling_price + filling[0].selling_price + cover[0].selling_price + dough[0].selling_price;
+    data.cost_price = dough[0].cost_price + filling[0].cost_price + cover[0].cost_price + dough[0].cost_price;
+
+    data.weight = dough[0].weight + filling[0].weight + cover[0].weight + dough[0].weight;
+    data.calories = dough[0].calories + filling[0].calories + cover[0].calories + dough[0].calories;
 
     data.dough = dough[0];
     data.filling = filling[0];

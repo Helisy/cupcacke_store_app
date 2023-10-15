@@ -14,6 +14,30 @@ module.exports = {
             errorMessage: 'Empty field.',
         },
     }, 
+    selling_price :{
+        isFloat:{
+            options: {
+                min: 2,
+                max: 100
+            },
+            errorMessage: 'The value selling_price must be at least 1 and max 100.',
+        },
+        notEmpty: {
+            errorMessage: 'Empty field.',
+        },
+    },
+    cost_price: {
+        isFloat:{
+            options: {
+                min: 0.25,
+                max: 100
+            },
+            errorMessage: 'The value selling_price must be at least 0.25 and max 100.',
+        },
+        notEmpty: {
+            errorMessage: 'Empty field.',
+        },
+    },
     ingredients: {
         isLength: {
             options: { min: 3, max: 255 },
@@ -23,6 +47,26 @@ module.exports = {
             errorMessage: 'Empty field.',
         },
     }, 
+    contains_allergens: {
+        optional: {
+            options: {
+             nullable: true,
+            }
+         },
+        isBoolean:{
+            errorMessage: 'The value contains_allergens must be true or false, 1 or 0.',
+        }
+    },
+    is_vegan: {
+        optional: {
+            options: {
+             nullable: true,
+            }
+         },
+        isBoolean:{
+            errorMessage: 'The value is_vegan must be true or false, 1 or 0.',
+        }
+    },
     weight: {
         isInt: {
             errorMessage: 'The value weight must be an interger.',
