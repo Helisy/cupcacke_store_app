@@ -51,6 +51,76 @@
         {
             background-color: rgba(255, 255, 255, .25);
         }
+
+
+
+
+
+
+
+
+
+        .flavors-section
+        {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(8, calc(100% / 8));
+            margin-top: 1rem;
+        }
+
+        .flavors-section img
+        {
+            width: 100%;
+            height: auto;
+            border-radius: 8%;
+        }
+
+        .flavors-section a
+        {
+            text-decoration: none;
+            color: white;
+            position: relative;
+            padding: .5rem;
+        }
+
+        .flavors-section span
+        {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            font-weight: 600;
+           
+        }
+
+        @media only screen and (max-width: 600px) 
+        {
+            .flavors-section
+            {
+                grid-template-columns: repeat(8, calc(200% / 8));
+                overflow: auto;
+            }
+
+            .flavors-section span
+            {
+                font-size: .5rem;
+            }
+        }
+
+
+
+
+
+        .most-ordered-section
+        {
+            width: calc(100% - 1rem);
+            margin-top: 1rem;
+            padding: 0 .5rem;
+        }
+
+        .most-ordered-section h3
+        {
+            font-family: 'Montserrat', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +138,75 @@
                         <span></span>
                     <% }); %>
                 </div>
+            </div>
+            <div class="flavors-section">
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+                <a href="#">
+                    <img src="public/images/flavors/chocolate.png" alt="">
+                    <span>Chocolate</span>
+                </a>
+            </div>
+            <div class="most-ordered-section">
+                <h3>Os mais pedidos</h3>
             </div>
         </div>
     </div>
