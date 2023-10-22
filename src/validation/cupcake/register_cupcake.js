@@ -8,6 +8,15 @@ module.exports = {
             errorMessage: 'Empty field.',
         },
     }, 
+    cover_image: {
+        isLength: {
+            options: { min: 15, max: 255 },
+            errorMessage: 'The value cover_image must be at least 15 and max 255 characters.',
+        },
+        notEmpty: {
+            errorMessage: 'Empty field.',
+        },
+    }, 
     description: {
         optional: {
            options: {

@@ -64,7 +64,7 @@ router.get('/', verifyToken, async (req, res) => {
 const registerValidation = require("../../../validation/cupcake/register_cupcake");
 
 router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
-    const {name, description, dough_id, filling_id, cover_id, decoration_id } = req.body;
+    const { name, cover_image, description, dough_id, filling_id, cover_id, decoration_id } = req.body;
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -82,7 +82,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
         })
     }
 
-    await db.execute(`insert into cupcakes(name, description, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?);`, [name, description, dough_id, filling_id, cover_id, decoration_id])
+    await db.execute(`insert into cupcakes(name, cover_image, description, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?, ?);`, [name, cover_image, description, dough_id, filling_id, cover_id, decoration_id])
 
     res.status(200).json(
         {

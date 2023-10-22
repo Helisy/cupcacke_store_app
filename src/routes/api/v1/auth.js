@@ -157,7 +157,7 @@ router.post('/login', async (req, res) => {
             verified: rows[0].verified  
         }, process.env.TOKEN_SECRETE);
 
-        res.status(200).cookie('acessToken', acessToken, {httpOnly: true}).json({
+        res.status(200).cookie('accessToken', acessToken, {httpOnly: true}).json({
             method: "POST",
             error: false,
             code: 200,
