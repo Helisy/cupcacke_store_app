@@ -1,0 +1,42 @@
+.banner
+{
+    position: relative;
+    display: flex;
+    overflow: hidden;
+}
+
+.banner > img
+{
+    width: 100%;
+    height: auto;
+}
+
+.banner-holder 
+{
+    position: relative;
+}
+
+.banner-holder > div:nth-child(2)
+{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    bottom: .5rem;
+    right: 50%;
+    transform: translateX(50%);
+    align-items: center;
+}
+
+.banner-holder > div:nth-child(2) span
+{
+    width: .5rem;
+    height: .5rem;
+    margin: 0 .1rem;
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 100%;
+}
+
+.banner-holder > div:nth-child(2) span.big
+{
+    background-color: rgba(255, 255, 255, .25);
+}
