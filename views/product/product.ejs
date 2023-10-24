@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake Store</title>
+    <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="public/styles/global.css">
+    <link rel="stylesheet" href="public/styles/nav-bar.css">
+    <link rel="stylesheet" href="public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="public/styles/cart.css">
+
+    
+    <script src="public/scripts/cart.js" defer></script>
+    <script src="public/scripts/http_helper.js"></script>
+    <style>
+       .content
+       {
+            display: flex;
+            padding-top: 12rem;
+            gap: 1rem;
+       }
+
+       .content div:nth-child(1)
+       {
+            width: 50%;
+       }
+
+       .content div:nth-child(2)
+       {
+            width: 50%;
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            padding: 1rem;
+            font-family: 'Montserrat', sans-serif;
+       }
+
+       .content div:nth-child(2) h2
+       {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.6rem;
+       }
+
+       .content div:nth-child(2) ul
+       {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            padding: .5rem;
+            width: calc(100% - 1rem);
+            background-color: rgba(241, 10, 118, 0.212);
+            border: 1px solid rgb(241, 10, 118);
+            border-radius: .4rem;
+            margin: 1rem 0;
+       }
+
+
+       .content img
+       {
+            width: 100%;
+            height: auto;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+       }
+    </style>
+</head>
+<body>
+    <%- include('../modules/nav-bar.ejs'); -%>
+    <div class="cart" id="cart_menu">
+        <div>
+            <i class="fa-solid fa-xmark" id="cart_close"></i>
+            <div class="cart_items">
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h3>Total</h3><h3>R$ 65,80</h3>
+                </div>
+                <button>Comprar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div>
+                <img src="public/images/flavors/cupcake.png" alt="">
+            </div>
+            <div>
+                <h2>Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas</h2>
+                <ul>
+                    <li><b>Massa: </b>Massa Branca</li>
+                    <li><b>Cobertura: </b>chantilly</li>
+                    <li><b>Recheio: </b>Doce de Leite</li>
+                    <li><b>Decoração: </b>Corações coloridos</li>
+                </ul>
+                <div>
+                    <h3>R$ 6,20</h3>
+                </div>
+                <div>
+                    <button>Comprar</button>
+                    <button><i class="fa-solid fa-cart-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    <div class="footer">
+
+    </div>
+    <%- include('../modules/mobile-menu.ejs'); -%>
+    <script>
+       
+    </script>
+</body>
+</html>

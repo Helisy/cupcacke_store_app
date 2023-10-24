@@ -33,6 +33,10 @@ app.get('/', (req, res) => {
     res.render('home/home.ejs', {banners: banners});
 });
 
+app.get('/product', (req, res) => {
+    res.render('product/product.ejs');
+});
+
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
   });
