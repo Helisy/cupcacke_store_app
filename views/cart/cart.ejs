@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake Store</title>
+    <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="public/styles/global.css">
+    <link rel="stylesheet" href="public/styles/nav-bar.css">
+    <link rel="stylesheet" href="public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="public/styles/cart.css">
+    <link rel="stylesheet" href="public/styles/slider-switch.css">
+    <script src="public/scripts/cart.js" defer></script>
+    <script src="public/scripts/http_helper.js"></script>
+    <style>
+        .cart-body
+        {
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            padding: 1rem;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .cart-body > table
+        {
+            width: 100%;
+        }
+        
+        .cart-body > table th
+        {
+            font-family: 'Montserrat', sans-serif;
+            text-align: start;
+        }
+
+        .cart-body > table td:nth-child(1) img
+        {
+            width: 5rem;
+            height: auto;
+            border-radius: .4rem;
+        }
+
+        .cart-body > table td:nth-child(4) input
+        {
+            width: 50%;
+        }
+
+        .cart-info
+        {
+            margin-top: 2rem;
+        }
+
+        .cart-info > div:nth-child(1)
+        {
+            margin-bottom: .5rem;
+        }
+
+        .cart-info > div:nth-child(2)
+        {
+            margin-bottom: .5rem;
+        }
+
+        .cart-info > div:nth-child(2) > div:nth-child(1)
+        {
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-info > div:nth-child(4)
+        {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            align-items: end;
+        }
+
+        .cart-info > div:nth-child(3)
+        {
+            margin-top: 3rem;
+        }
+
+        
+        .cart-info input
+        {
+            padding: .5rem;
+            border-radius: .4rem;
+            border: none;
+            outline: 2px solid black;
+            margin-right: .5rem;
+        }
+
+        .cart-info > div:nth-child(3) > button
+        {
+            padding: .5rem;
+            border-radius: .4rem;
+            border: none;
+            background-color: black;
+           color: white;
+        }
+
+
+        .cart-info > div:nth-child(4) div > span:nth-child(1)
+        {
+            font-size: 1.5rem;
+        }
+
+        .cart-info > div:nth-child(4) div .big
+        {
+            font-size: 2rem;
+            font-weight: 900;
+            color: rgb(4, 129, 0);
+        }
+
+        .cart-info > div:nth-child(5)
+        {
+            display: flex;
+            justify-content: end;
+            margin-top: 2rem;
+        }
+
+        .cart-info > div:nth-child(5) > button
+        {
+           
+            padding: .5rem;
+            border: none;
+            outline: none;
+            background-color: black;
+            color: white;
+            font-weight: 900;
+            border-radius: .4rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: .3s ease;
+        }
+
+        .cart-info > div:nth-child(5) > button:active
+        {
+            background-color: rgb(119, 119, 119);
+        }
+
+        @media only screen and (max-width: 600px) 
+        {
+            .cart-body > table 
+            {
+                width: 50%;
+            }
+
+            .cart-body > table 
+            {
+                width: 50%;
+            }
+
+            .cart-body  tr 
+            {
+                font-size: .8rem;
+            }
+
+            .cart-body > table td:nth-child(1) img 
+            {
+                width: 3rem;
+                height: auto;
+            }
+
+            /* .cart-body 
+            {
+                width: calc(100% - 1rem);
+                padding: 1rem;
+            } */
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <%- include('../modules/nav-bar.ejs'); -%>
+    <div class="cart" id="cart_menu">
+        <div>
+            <i class="fa-solid fa-xmark" id="cart_close"></i>
+            <div class="cart_items">
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart_item">
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    <div>
+                        <h4>Cupcake Doce De Leite</h4>
+                        <div>
+                            <h3>R$ 65,80</h3> <h3>15 un</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h3>Total</h3><h3>R$ 65,80</h3>
+                </div>
+                <button>Comprar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content">
+         <div class="cart-body">
+            <table id="cart_table">
+                <!-- <tr>
+                    <th>Produto</th>
+                    <th></th>
+                    <th>Preço unitário</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th>Excluir</th>
+                </tr>
+                <tr>
+                    <td>
+                    <img src="public/images/flavors/cupcake.png" alt="">
+                    </td>
+                    <td>Cupcake Doce De Leite Recheado Com Amor</td>
+                    <td>R$ 5,68</td>
+                    <td>
+                        <input type="number">
+                    </td>
+                    <td>R$ 54,80</td>
+                    <td><i class="fa-solid fa-trash"></i></td>
+                </tr> -->
+            </table>
+            <div class="cart-info">
+                <div>
+                    <!-- <span><b>Endereço:</b> Rua Dom Dinis nº 126, Parque dos Príncipes, Jacareí - SP</span>
+                    <div>
+                        <span>R$ 5,60</span>
+                    </div> -->
+                </div>
+                <div>
+                    <!-- <div>
+                        <span>Escolher data de entrega?</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>   
+                    </div>
+                    <div>
+                        <input id="dateTime" type="datetime-local" name="" id="">
+                    </div> -->
+                </div>
+                <div>
+                    <!-- <input type="text">
+                    <button>Aplicar</button> -->
+                </div>
+                <div>
+                    <div>
+                        <span>Total: <span id="total_vlr"" class="big">R$ 50,55</span></span>
+                        <br>
+                        <!-- <span>Entrega: R$ 8,55</span> -->
+                    </div>
+            </div>
+            <div>
+                <button id="end_order_btn">Continuar para o Pagamento</button>
+            </div>
+         </div>
+        </div>
+    </div>
+    <div class="footer">
+
+    </div>
+    <%- include('../modules/mobile-menu.ejs'); -%>
+    <script src="/public/scripts/loadCart.js"></script>
+    <script>
+    //    const toggle = document.querySelector(".switch > input");
+       const cart_table = document.querySelector("#cart_table");
+       const end_order_btn = document.querySelector("#end_order_btn");
+       const total_vlr = document.querySelector("#total_vlr");
+       
+    //    dateTime.style.display = "none";
+    //    toggle.addEventListener('click', e => {
+    //         if(toggle.checked){
+    //             dateTime.style.display = "unset";
+    //         }else{
+    //             dateTime.style.display = "none";
+    //         }
+    //    });
+
+       async function init(){
+            const cart_items = localStorage.getItem("cart_items");
+            var newCart = JSON.parse(cart_items);
+
+            var items = [];
+
+            for (let i = 0; i < newCart.length; i++) {
+                var cupcake = await fetchInfo(`/api/v1/cupcake/${newCart[i].product_id}`);
+                cupcake.data.item_quantity = newCart[i].quantity;
+                items.push(cupcake.data);
+            }
+
+            var html = `
+                <tr>
+                    <th>Produto</th>
+                    <th></th>
+                    <th>Preço unitário</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th>Excluir</th>
+                </tr>
+            `
+
+            var vlr = 0;
+
+            for (let i = 0; i < items.length; i++) {
+                html += `
+                <tr>
+                    <td>
+                    <img src="${items[i].cover_image}" alt="">
+                    </td>
+                    <td>${items[i].name}</td>
+                    <td>${formatter.format(items[i].selling_price)}</td>
+                    <td>
+                        <input oninput="if(this.value < 1){this.value = 1}else if(this.value > 50){this.value = 50}" onfocusout="edit(this, ${items[i].selling_price}, ${i})" type="number" value="${items[i].item_quantity}">
+                    </td>
+                    <td data-total_vlr="${items[i].selling_price * items[i].item_quantity}">${formatter.format(items[i].selling_price * items[i].item_quantity)}</td>
+                    <td onclick="deleteFromCart(${i})"><i class="fa-solid fa-trash"></i></td>
+                </tr>
+                `;
+                vlr += items[i].selling_price * items[i].item_quantity;
+            }
+
+            cart_table.innerHTML = html;
+
+            total_vlr.innerHTML = formatter.format(vlr);
+       };
+
+        init();
+        loadCart();
+
+        function edit(e, val, index){
+            e.parentElement.parentElement.children[4].innerHTML = formatter.format(val * e.value);
+
+            const cart_items = localStorage.getItem("cart_items");
+            var newCart = JSON.parse(cart_items);
+
+            newCart[index].quantity = e.value;  
+            
+
+            localStorage.setItem("cart_items", JSON.stringify(newCart));
+            init();
+        }
+
+        function deleteFromCart(count_id){
+            var cart_items = localStorage.getItem("cart_items");
+            var newCart = JSON.parse(cart_items);
+
+            newCart = newCart.splice(count_id, count_id)
+
+            localStorage.setItem("cart_items", JSON.stringify(newCart));
+            init();
+            loadCart();
+       }
+
+
+    </script>
+</body>
+</html>

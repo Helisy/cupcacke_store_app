@@ -26,6 +26,9 @@ const apiRouter = require('./src/routes/api/api');
 app.use("/api", apiRouter);
 /***/
 
+
+
+
 const fs = require('fs');
 var banners = fs.readdirSync("./public/images/banner")
 banners = banners.map(banner => {return banner = "public/images/banner/" + banner})
@@ -34,8 +37,29 @@ app.get('/', (req, res) => {
 });
 
 app.get('/product', (req, res) => {
+    res.redirect('/');
+});
+
+app.get('/cart', (req, res) => {
+    res.render('cart/cart.ejs');
+});
+
+app.get('/login', (req, res) => {
+    res.render('login/login.ejs');
+});
+
+app.get('/product/:id', (req, res) => {
+    const {id} = req.params;
+
+    if(isNaN(parseInt(id))){
+        return  res.redirect('/');
+    }
+
     res.render('product/product.ejs');
 });
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
