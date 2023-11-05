@@ -4,6 +4,9 @@ first_name varchar(255) not null,
 last_name varchar(255) not null,
 email varchar(255) not null,
 password varchar(255) not null,
+document_id varchar(255) not null,
+address_cep varchar(255) not null,
+address_number varchar(255) not null,
 role varchar(255) DEFAULT 'basic',
 verified boolean DEFAULT false,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -12,9 +15,12 @@ primary key(id) );
 
 select * from users;
 
+select address_cep, address_number from users where id = 1;
+
 create table cupcakes(
 id int not null auto_increment,
 name varchar(255) not null,
+cover_image varchar(255) not null,
 description varchar(255),
 dough int not null,
 filling int not null,
@@ -27,8 +33,8 @@ primary key(id)
 
 select * from cupcakes;
 
-insert into cupcakes(name, description, dough, filling, cover, decoration) 
-values("Cupcake Doce De Leite", "Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas", 3, 4, 5, 6);
+insert into cupcakes(name, cover_image, description, dough, filling, cover, decoration) 
+values("Cupcake Doce De Leite", "public/images/flavors/cupcake.png", "Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas", 3, 4, 5, 6);
 
 select cupcakes.*, a.name as dough_name, b.name as filling_name, c.name as cover_name, d.name as decoration_name
 from cupcakes
