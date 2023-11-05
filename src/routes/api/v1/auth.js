@@ -57,7 +57,7 @@ router.get('/logout', async (req, res) => {
 const registerValidation = require("../../../validation/auth/register_body")
 
 router.post('/register', checkSchema(registerValidation), async (req, res) => {
-    const {firstName, lastName, email, password} = req.body;
+    const {firstName, lastName, email, password, document_id, address_cep, address_number} = req.body;
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -94,8 +94,8 @@ router.post('/register', checkSchema(registerValidation), async (req, res) => {
 
     bcrypt.hash(password, 10).then(async (hash) =>
     {
-        let sql = `INSERT INTO users (first_name, last_name, email, password) VALUES('${firstName}', '${lastName}', '${email}', '${hash}');`;
-        await db.execute(sql)
+        let sql = `INSERT INTO users (first_name, last_name, email, password, document_id, address_cep, address_number) VALUES(?, ?, ?, ?, ?, ?, ?);`;
+        await db.execute(sql, [firstName, lastName, email, hash, document_id, address_cep, address_number])
 
         res.status(201).json(
             {

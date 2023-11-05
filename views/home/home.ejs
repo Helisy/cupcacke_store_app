@@ -70,48 +70,13 @@
         <div>
             <i class="fa-solid fa-xmark" id="cart_close"></i>
             <div class="cart_items">
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <div>
-                <div>
-                    <h3>Total</h3><h3>R$ 65,80</h3>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
                 </div>
-                <button>Comprar</button>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
             </div>
         </div>
     </div>
@@ -239,7 +204,7 @@
                                 <h3>R$ ${most_ordered_product.data[i].selling_price.toString().replace(".", ",")}</h3>  <h3>R$ ${(most_ordered_product.data[i].selling_price + (most_ordered_product.data[i].selling_price * 0.15)).toFixed(2).replace(".", ",")}</h3>
                             </div>
                             <div>
-                                <button>Pedir</button>
+                                <button onClick="window.location.href = '/product/${most_ordered_product.data[i].id}'">Pedir</button>
                             </div>
                         </div>
                     </div>

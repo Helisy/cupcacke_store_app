@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
-const { validateToken } = require('./src/middleware/authMiddleware')
+const { validateToken, checkToken } = require('./src/middleware/authMiddleware')
 
 const app = express();
 const PORT = process.env.PORT;
@@ -18,13 +18,13 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 
 
-// Routers
-const authRouter = require('./src/routes/auth');
-app.use("/auth", authRouter);
+// // Routers
+// const authRouter = require('./src/routes/auth');
+// app.use("/auth", authRouter);
 
 const apiRouter = require('./src/routes/api/api');
 app.use("/api", apiRouter);
-/***/
+// /***/
 
 
 
@@ -32,30 +32,42 @@ app.use("/api", apiRouter);
 const fs = require('fs');
 var banners = fs.readdirSync("./public/images/banner")
 banners = banners.map(banner => {return banner = "public/images/banner/" + banner})
-app.get('/', (req, res) => {
-    res.render('home/home.ejs', {banners: banners});
+app.get('/', checkToken, (req, res) => {
+    res.render('home/home.ejs', {banners: banners, username: req.user?.firstName});
 });
 
-app.get('/product', (req, res) => {
-    res.redirect('/');
+app.get('/product', checkToken, (req, res) => {
+    res.redirect('/', {username: req.user?.firstName});
 });
 
-app.get('/cart', (req, res) => {
-    res.render('cart/cart.ejs');
+app.get('/cart', checkToken, (req, res) => {
+    res.render('cart/cart.ejs', {username: req.user?.firstName});
 });
 
-app.get('/login', (req, res) => {
-    res.render('login/login.ejs');
+app.get('/payment', validateToken, (req, res) => {
+    res.render('payment/payment.ejs', {username: req.user?.firstName});
 });
 
-app.get('/product/:id', (req, res) => {
+app.get('/payment/sucess', validateToken, (req, res) => {
+    res.render('payment/sucess.ejs', {username: req.user?.firstName});
+});
+
+app.get('/auth/login', checkToken, checkToken, (req, res) => {
+    res.render('auth/login.ejs', {username: req.user?.firstName});
+});
+
+app.get('/auth/register', checkToken, (req, res) => {
+    res.render('auth/register.ejs', {username: req.user?.firstName});
+});
+
+app.get('/product/:id', checkToken, (req, res) => {
     const {id} = req.params;
 
     if(isNaN(parseInt(id))){
         return  res.redirect('/');
     }
 
-    res.render('product/product.ejs');
+    res.render('product/product.ejs', {username: req.user?.firstName});
 });
 
 

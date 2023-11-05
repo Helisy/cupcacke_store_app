@@ -25,4 +25,7 @@ router.use("/cupcake", cupcakeRouter);
 const ingredientRouter = require('./ingredient.js');
 router.use("/ingredient", ingredientRouter);
 
+const userRouter = require('./user.js');
+router.use("/user", userRouter);
+
 module.exports = router;

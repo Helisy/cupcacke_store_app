@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake Store</title>
+    <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/styles/global.css">
+    <link rel="stylesheet" href="/public/styles/nav-bar.css">
+    <link rel="stylesheet" href="/public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="/public/styles/cart.css">
+    <link rel="stylesheet" href="/public/styles/popup.css">
+    <script src="/public/scripts/popup.js" defer></script>
+    <script src="/public/scripts/cart.js" defer></script>
+    <script src="/public/scripts/http_helper.js"></script>
+    <style>
+        .content
+        {
+            display: grid;
+            grid-template-columns: repeat(3, calc(100% / 3));
+            grid-template-rows: repeat(10rem, 12);
+            justify-content: center;
+            gap: 1rem;
+            padding-top: 12rem;
+            padding-bottom: 4rem;
+        }
+
+        .content > div
+        {
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            overflow: hidden;
+            grid-row: 1/4;
+        }
+
+        .content > div > div:nth-child(1)
+        {
+            width: 100%;
+            background-color: rgb(224, 224, 224);
+            padding: .5rem 1rem;
+            border-bottom: 1px solid rgb(206, 206, 206);
+            display: flex;
+            align-items: center;
+            color: rgb(65, 65, 65);
+        }
+
+        .content > div > div:nth-child(1) > i
+        {
+            margin-right: .5rem;
+        }
+
+        .content > div > div:nth-child(2)
+        {
+            width: 100%;
+            padding: 1rem;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .content > div > div > ul
+        {
+            list-style: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content > div > li
+        {
+            list-style: none;
+            margin-top: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content > div:nth-child(4)
+        {
+            grid-column: 1/4;
+            grid-row: 5/8;
+        }
+
+        .card
+        {
+            border: 1px solid rgb(206, 206, 206);
+            border-radius: .4rem;
+            width: calc(100% - 4rem);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .card.selected
+        {
+            outline: 2px solid black;
+            border: none;
+        }
+
+        .card > p
+        {
+        font-size: .9rem;
+        }
+
+        .card > input
+        {
+            margin-top: .5rem;
+            padding: .3em;
+            border: 1px solid rgb(156, 156, 156);
+            border-radius: .4rem;
+            display: none;
+        }
+
+        .itens
+        {
+            width: calc(100% - 2rem)!important;
+            
+        }
+
+        .itens > span
+        {
+            
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .itens > div
+        {
+            
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: end;
+            border-top: 2px solid black;
+            padding-top: .5rem;
+            margin-top: .5rem;
+        }
+
+        .itens > div > p:nth-child(1)
+        {
+            color: rgb(4, 129, 0);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .fin
+        {
+            width: calc(100% - 2rem);
+            display: flex;
+            justify-content: end;
+        }
+
+        .fin > button
+        {
+            background-color: black;
+            font-size: 1.3rem;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: .4rem;
+            color: white;
+            padding: .5rem;
+        }
+
+        @media only screen and (max-width: 600px) 
+        {
+            .content
+            {
+                display: grid;
+                grid-template-columns: calc(100% - 2rem);
+                grid-template-rows: repeat(10rem, 10);
+                justify-content: center;
+                gap: 1rem;
+                padding-top: 12rem;
+                padding-bottom: 4rem;
+            }
+
+            .content > div:nth-child(1)
+            {
+                grid-row: 1/2;
+            }
+
+            .content > div:nth-child(2)
+            {
+                grid-row: 3/4;
+            }
+
+
+            .content > div:nth-child(3)
+            {
+                grid-row: 5/6;
+            }
+
+
+            .content > div:nth-child(4)
+            {
+                grid-column: 1/1;
+                grid-row: 7/12;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <%- include('../modules/nav-bar.ejs'); -%>
+    <div class="cart" id="cart_menu">
+        <div>
+            <i class="fa-solid fa-xmark" id="cart_close"></i>
+            <div class="cart_items">
+              
+            </div>
+            <div>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
+                </div>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="popup">
+            <h3></h3>
+        </div>
+        <div class="content">
+            <div>
+                <div>
+                    <i class="fa-solid fa-location-dot"></i><h3>Endereço de Entrega</h3>
+                </div>
+                <div id="address_info">
+                </div>
+            </div>
+            <div>
+                <div>
+                    <i class="fa-solid fa-location-dot"></i><h3>Opção de Entrega</h3>
+                </div>
+                <div>
+                    <div class="card selected">
+                        <h4>Padrão</h4>
+                        <p>de 45 a 65 minutos - Grátis</p>
+                    </div>
+                    <div class="card">
+                        <h4>Escolher Data de Entrega</h4>
+                        <p>Grátis</p>
+                        <input type="datetime-local" id="">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <i class="fa-solid fa-truck"></i></i><h3>Itens de Compra</h3>
+                </div>
+                <div class="itens" id="item_content">
+                    <!-- <h4>Itens Adicionados</h4>
+                    <span><p>Subtotal:</p><p>R$ 45,60</p></span>
+                    <span><p>Grátis:</p><p>R$ 0,0</p></span>
+                    <div>
+                        <p>R$ 45,6</p>
+                        <p>ou até 3x de 18,65</p>
+                    </div> -->
+                </div>
+            </div>
+            <div>
+                <div>
+                    <i class="fa-solid fa-money-bill"></i><h3>Escolher a forma de pagamento</h3>
+                </div>
+                <div>
+                    <div class="card">
+                        <h4>Cartão de Crédito</h4>
+                        <p>Não implementado</p>
+                    </div>
+                    <div class="card">
+                        <h4>Boleto</h4>
+                        <p>Não implementado</p>
+                    </div>
+                    <div class="card">
+                        <h4>Pix</h4>
+                        <p>Não implementado</p>
+                    </div>
+                    <div class="fin">
+                        <button id="order">Finalizar Compra</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+
+    </div>
+    </div>
+    <%- include('../modules/mobile-menu.ejs'); -%>
+    <script src="/public/scripts/loadCart.js"></script>
+    <script>
+
+    const selCard = document.querySelectorAll(".card");
+    const item_content = document.querySelector("#item_content");
+    const order = document.querySelector("#order");
+
+    order.addEventListener('click', e => {
+        window.location.href = "/payment/sucess";
+    });
+
+    selCard[0].addEventListener('click', e => {
+        selCard[0].classList.add("selected")
+        selCard[1].classList.remove("selected")
+        selCard[1].children[2].style.display = "none"
+    });
+
+    selCard[1].addEventListener('click', e => {
+        selCard[1].classList.add("selected")
+        selCard[0].classList.remove("selected")
+        selCard[1].children[2].style.display = "unset"
+    });
+
+    async function init(){
+        var user_adress = await fetchInfo(`/api/v1/user/current/address`);
+        var address = await fetchInfo(`https://viacep.com.br/ws/${user_adress.data.address_cep}/json/`);
+
+        address_info.innerHTML = `
+        <ul>
+            <li>${address.logradouro}, ${user_adress.data.address_number}</li>
+            <li>${address.bairro}</li>
+            <li>${address.localidade} - ${address.uf}</li>
+        </ul>
+        `;
+
+        const cart_items = localStorage.getItem("cart_items");
+        var newCart = JSON.parse(cart_items);
+
+        var items = [];
+
+        var total = 0;
+
+        for (let i = 0; i < newCart.length; i++) {
+            var cupcake = await fetchInfo(`/api/v1/cupcake/${newCart[i].product_id}`);
+            cupcake.data.item_quantity = newCart[i].quantity;
+            items.push(cupcake.data);
+            
+        }
+
+        for (let i = 0; i < items.length; i++) {
+            total += items[i].selling_price * items[i].item_quantity;
+        }
+
+        item_content.innerHTML = `
+        <h4>Itens Adicionados</h4>
+        <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
+        <span><p>Grátis:</p><p>R$ 0,0</p></span>
+        <div>
+            <p>${formatter.format(total)}</p>
+            <p>ou até 3x de ${formatter.format(total / 3)}</p>
+        </div>
+        `;
+    }
+
+    init();
+
+
+        loadCart();
+    </script>
+</body>
+</html>

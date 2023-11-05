@@ -1,7 +1,15 @@
 <nav>
     <div>
-        <i class="fa-solid fa-envelope"></i>
-        <h1>Loja de Cupcakes</h1>
+        <% if(!username){ %>
+            <div>
+                <a href="/auth/register">Criar uma conta</a>
+                <span>ou</span>
+                <a href="/auth/login">Entrar</a>
+            </div>
+        <% }else{ %>
+            <a class="user" href="/auth/login"><%= username %></a>
+        <% } %>
+        <h1 onClick="window.location.href = '/'" style="cursor: pointer;">Loja de Cupcakes</h1>
         <div>
             <i class="fa-solid fa-heart"></i>
             <div class="numbered-icon" id="cart_toggle">

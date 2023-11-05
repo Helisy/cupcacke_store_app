@@ -29,6 +29,18 @@ const isAuthenticated = (req, res, next) => {
     });
 }
 
+const checkToken = (req, res, next) => {
+    const accessToken = req.cookies.accessToken;
+
+    if(!accessToken) return next();
+
+    verify(accessToken, process.env.TOKEN_SECRETE, (err, user) =>{
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        return next();
+    });
+}
+
 const verifyToken = (req, res, next) => {
     const accessToken = req.headers['token'] || req.cookies.accessToken;
 
@@ -66,4 +78,4 @@ const verifyToken = (req, res, next) => {
     });
 }
 
-module.exports = { validateToken, isAuthenticated, verifyToken };
+module.exports = { validateToken, isAuthenticated, checkToken, verifyToken };

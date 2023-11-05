@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cupcake Store</title>
     <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="public/styles/global.css">
-    <link rel="stylesheet" href="public/styles/nav-bar.css">
-    <link rel="stylesheet" href="public/styles/mobile-menu.css">
-    <link rel="stylesheet" href="public/styles/cart.css">
-    <link rel="stylesheet" href="public/styles/home-banner.css">
-    <link rel="stylesheet" href="public/styles/most-ordered.css">
-    <script src="public/scripts/cart.js" defer></script>
-    <script src="public/scripts/banner_carrousel.js" defer></script>
-    <script src="public/scripts/http_helper.js"></script>
+    <link rel="stylesheet" href="/public/styles/global.css">
+    <link rel="stylesheet" href="/public/styles/nav-bar.css">
+    <link rel="stylesheet" href="/public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="/public/styles/cart.css">
+    <link rel="stylesheet" href="/public/styles/popup.css">
+    <script src="/public/scripts/popup.js" defer></script>
+    <script src="/public/scripts/cart.js" defer></script>
+    <script src="/public/scripts/http_helper.js"></script>
     <style>
         .content
         {
@@ -35,15 +34,27 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: center;
         }
 
         .content > div > div
         {
             display: flex;
+            font-size: 2rem;
+            font-weight: 600;
+            height: 90%;
             justify-content: center;
-            flex-direction: column;
-            gap: .5rem;
+            align-items: center;
         }
+
+        .content > div > div > i
+        {
+            font-size: 4rem;
+            margin-right: .5rem;
+        }
+
+
+
 
         .content > div input
         {
@@ -67,6 +78,20 @@
             color: white;
             padding: .5rem;
         }
+
+        .content > div a
+        {
+            color: black;
+        }
+
+        @media only screen and (max-width: 600px) 
+        {
+            .content > div
+            {
+                width: 100%;
+                margin: 1rem;
+            }   
+        }
         
     </style>
 </head>
@@ -76,25 +101,26 @@
         <div>
             <i class="fa-solid fa-xmark" id="cart_close"></i>
             <div class="cart_items">
-                
+              
             </div>
             <div>
-                <div>
-                    <h3>Total</h3><h3>R$ 65,80</h3>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
                 </div>
-                <button>Comprar</button>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
             </div>
         </div>
     </div>
     <div class="container">
+        <div class="popup">
+            <h3></h3>
+        </div>
         <div class="content">
             <div>
-                <div>
-                    <h2>Acessar Conta</h2>
-                    <input type="text" placeholder="Email" maxlength="130">
-                    <input type="text" placeholder="Senha" maxlength="130">
+                <div id="login_info">
+                    <i class="fa-solid fa-circle-check"></i><span>Pedido Realizado</span>
                 </div>
-                <button>Entrar</button>
+                <a href="/">Ver meus pedidos</a>
             </div>
         </div>
     </div>
@@ -105,6 +131,7 @@
     <%- include('../modules/mobile-menu.ejs'); -%>
     <script src="/public/scripts/loadCart.js"></script>
     <script>
+
         loadCart();
     </script>
 </body>

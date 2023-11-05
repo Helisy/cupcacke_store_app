@@ -17,7 +17,17 @@ nav > div:nth-child(1)
     
 }
 
-nav > div:nth-child(1) > div
+nav > div:nth-child(1) > div:nth-child(1) > a
+{
+    color: black;
+}
+
+nav > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)
+{
+    font-weight: 600;
+}
+
+nav > div:nth-child(1) > div:nth-child(3)
 {
     width: 8%;
     display: flex;
@@ -90,6 +100,14 @@ nav > div:nth-child(2)
     font-size: 1rem;
 }
 
+.user
+{
+    text-decoration: none;
+    color: black;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
 @media only screen and (max-width: 600px) 
 {
     nav i
@@ -113,9 +131,22 @@ nav > div:nth-child(2)
         padding: 0 1rem;
     }
 
+    nav > div:nth-child(1) > div:nth-child(1) > a
+    {
+        font-size: .8rem;
+    }
+
     .search-bar
     {
         width: 100%;
     }
 
+    nav > div:nth-child(1) > div:nth-child(3) {
+        width: 13%;
+    }
+
+    .user
+    {
+        font-size: .8rem;
+    }
 }

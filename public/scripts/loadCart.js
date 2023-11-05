@@ -5,8 +5,19 @@ async function loadCart(){
     const cart_items = localStorage.getItem("cart_items");
     var newCart = JSON.parse(cart_items);
 
+    var float_cart_vlr = 0;
+
     if(!newCart){
         cart_items_container.innerHTML = "";
+        cart_price.innerHTML = formatter.format(0);
+        cart_num.innerHTML = 0;
+        return
+    }
+
+    if(newCart.length < 1){
+        cart_items_container.innerHTML = "";
+        cart_price.innerHTML = formatter.format(0);
+        cart_num.innerHTML = 0;
         return
     }
 
@@ -18,9 +29,11 @@ async function loadCart(){
         items.push(cupcake.data);
     }
 
+   
+
     var newHtml = "";
     for (let i = 0; i < items.length; i++) {
-        
+        float_cart_vlr += items[i].selling_price * items[i].item_quantity;
         newHtml += 
         `<div class="cart_item">
             <img src="${items[i].cover_image}" alt="">
@@ -33,6 +46,7 @@ async function loadCart(){
         </div>`
     }
 
+    cart_price.innerHTML = formatter.format(float_cart_vlr);
     cart_num.innerHTML = items.length;
     cart_items_container.innerHTML = newHtml;
 }

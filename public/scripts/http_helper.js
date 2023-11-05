@@ -10,6 +10,8 @@ async function fetchInfo(url)
     })
     .then((data) => {
         info = data;
+    }).catch(err => {
+        info = [];
     });
     return info;
 }
@@ -27,6 +29,8 @@ async function postData(url, method, data)
     })
     .then((data) => {
         info = data;
+    }).catch(err => {
+       
     });
     return info;
 }

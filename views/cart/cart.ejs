@@ -177,48 +177,13 @@
         <div>
             <i class="fa-solid fa-xmark" id="cart_close"></i>
             <div class="cart_items">
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart_item">
-                    <img src="public/images/flavors/cupcake.png" alt="">
-                    <div>
-                        <h4>Cupcake Doce De Leite</h4>
-                        <div>
-                            <h3>R$ 65,80</h3> <h3>15 un</h3>
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <div>
-                <div>
-                    <h3>Total</h3><h3>R$ 65,80</h3>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
                 </div>
-                <button>Comprar</button>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
             </div>
         </div>
     </div>
@@ -272,7 +237,7 @@
                 </div>
                 <div>
                     <div>
-                        <span>Total: <span id="total_vlr"" class="big">R$ 50,55</span></span>
+                        <span>Total: <span id="total_vlr"" class="big"></span></span>
                         <br>
                         <!-- <span>Entrega: R$ 8,55</span> -->
                     </div>
@@ -294,6 +259,15 @@
        const end_order_btn = document.querySelector("#end_order_btn");
        const total_vlr = document.querySelector("#total_vlr");
        
+       end_order_btn.addEventListener('click', e => {
+            const cart_items = localStorage.getItem("cart_items");
+            var newCart = JSON.parse(cart_items);
+
+            if(newCart.length > 0){
+                window.location.replace("/payment")
+            }
+       })
+
     //    dateTime.style.display = "none";
     //    toggle.addEventListener('click', e => {
     //         if(toggle.checked){
@@ -371,11 +345,22 @@
             var cart_items = localStorage.getItem("cart_items");
             var newCart = JSON.parse(cart_items);
 
-            newCart = newCart.splice(count_id, count_id)
+            newCart = removeFrom(newCart, count_id)
 
             localStorage.setItem("cart_items", JSON.stringify(newCart));
             init();
             loadCart();
+       }
+
+       function removeFrom(array, index){
+        var newArray = [];
+            for (let i = 0; i < array.length; i++) {
+                if(i != index){
+                    newArray.push(array[i])
+                }
+                
+            }
+            return newArray;
        }
 
 
