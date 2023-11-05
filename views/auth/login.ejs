@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake Store</title>
+    <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/styles/global.css">
+    <link rel="stylesheet" href="/public/styles/nav-bar.css">
+    <link rel="stylesheet" href="/public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="/public/styles/cart.css">
+    <link rel="stylesheet" href="/public/styles/popup.css">
+    <script src="/public/scripts/popup.js" defer></script>
+    <script src="/public/scripts/cart.js" defer></script>
+    <script src="/public/scripts/http_helper.js"></script>
+    <style>
+        .content
+        {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .content > div
+        {
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            padding: 1rem;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+            width: 50%;
+            height: 15rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content > div > div
+        {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .content > div input
+        {
+
+            gap: .5rem;
+            font-size: 1.2rem;
+            padding: .5rem;
+            border-radius: .4rem;
+            border: none;
+            border: 2px solid black;
+        }
+        
+        .content > div button
+        {
+            background-color: black;
+            font-size: 1.3rem;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: .4rem;
+            color: white;
+            padding: .5rem;
+        }
+
+        @media only screen and (max-width: 600px) 
+        {
+            .content > div
+            {
+                width: 100%;
+                margin: 1rem;
+            }   
+        }
+        
+    </style>
+</head>
+<body>
+    <%- include('../modules/nav-bar.ejs'); -%>
+    <div class="cart" id="cart_menu">
+        <div>
+            <i class="fa-solid fa-xmark" id="cart_close"></i>
+            <div class="cart_items">
+              
+            </div>
+            <div>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
+                </div>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="popup">
+            <h3></h3>
+        </div>
+        <div class="content">
+            <div>
+                <div id="login_info">
+                    <h2>Acessar Conta</h2>
+                    <input type="email" placeholder="Email" maxlength="130">
+                    <input type="password" placeholder="Senha" maxlength="130">
+                </div>
+                <button id="login">Entrar</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+
+    </div>
+    </div>
+    <%- include('../modules/mobile-menu.ejs'); -%>
+    <script src="/public/scripts/loadCart.js"></script>
+    <script>
+        const login_info = document.querySelector("#login_info");
+        const login = document.querySelector("#login");
+        
+        login.addEventListener('click', async e => {
+            const res = await postData('/api/v1/auth/login', "post",{
+            email:  login_info.children[1].value,
+            password: login_info.children[2].value,
+           });
+
+           if(res.error){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Email ou senha incorreto."
+           }else{
+            window.location.replace('/')
+           }
+        });
+
+        loadCart();
+    </script>
+</body>
+</html>
