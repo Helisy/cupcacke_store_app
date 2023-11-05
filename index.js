@@ -60,6 +60,10 @@ app.get('/auth/register', checkToken, (req, res) => {
     res.render('auth/register.ejs', {username: req.user?.firstName});
 });
 
+app.get('/search', checkToken, (req, res) => {
+    res.render('search/search.ejs', {username: req.user?.firstName});
+});
+
 app.get('/product/:id', checkToken, (req, res) => {
     const {id} = req.params;
 
