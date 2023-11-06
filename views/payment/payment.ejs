@@ -237,7 +237,7 @@
                     <div class="card">
                         <h4>Escolher Data de Entrega</h4>
                         <p>Grátis</p>
-                        <input type="datetime-local" id="">
+                        <input type="datetime-local" id="date_delivery">
                     </div>
                 </div>
             </div>
@@ -290,21 +290,85 @@
     const selCard = document.querySelectorAll(".card");
     const item_content = document.querySelector("#item_content");
     const order = document.querySelector("#order");
+    const date_delivery = document.querySelector("#date_delivery");
 
-    order.addEventListener('click', e => {
-        window.location.href = "/payment/sucess";
+    var chooseDate = new Boolean(false);
+
+    order.addEventListener('click', async e => {
+        var deliv_date;
+
+        if(chooseDate == false){
+            deliv_date = getHourAhead().toISOString().split(".")[0];
+            
+            date = new Date(deliv_date);
+
+            if(date.getHours() > 18 || date.getHours() < 7){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Estamos fechados, nosso horário de atendimento é das 7h as 18h"
+                return
+            }
+        }else{
+            if(date_delivery.value == ""){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Escolha uma data ou horário para envio."
+                return;
+            }
+
+            deliv_date = date_delivery.value + ":00";
+
+            date = new Date(deliv_date);
+
+            if(date.getHours() > 18 || date.getHours() < 7){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Estamos fechados, nosso horário de atendimento é das 7h as 18h"
+                return
+            }
+
+            if(date < new Date()){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Não é possível escolher esse horário."
+                return
+            }
+        }
+
+        const cart_items = localStorage.getItem("cart_items");
+        var newCart = JSON.parse(cart_items);
+
+        if(newCart.length < 1){
+            popup.style.display = "unset";
+            popup.children[0].innerHTML = "Seu carrinho de compras está vazio."
+            return
+        }
+
+        // console.log(newCart)
+        // console.log(deliv_date)
+
+        const res = await postData('/api/v1/orders/', "post",{
+            delivery_date: deliv_date,
+            items: newCart
+           });
+
+           if(res.error){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Ocorreu um erro."
+           }else{
+                localStorage.setItem("cart_items", JSON.stringify([]));
+                window.location.href = "/payment/sucess";
+           }
     });
 
     selCard[0].addEventListener('click', e => {
         selCard[0].classList.add("selected")
         selCard[1].classList.remove("selected")
         selCard[1].children[2].style.display = "none"
+        chooseDate = false;
     });
 
     selCard[1].addEventListener('click', e => {
         selCard[1].classList.add("selected")
         selCard[0].classList.remove("selected")
         selCard[1].children[2].style.display = "unset"
+        chooseDate = true;
     });
 
     async function init(){
@@ -349,9 +413,13 @@
     }
 
     init();
+    loadCart();
 
-
-        loadCart();
+    function getHourAhead() {
+        const now = new Date();
+        now.setHours(now.getHours() - 2);
+        return now;
+    }
     </script>
 </body>
 </html>

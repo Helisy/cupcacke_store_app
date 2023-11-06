@@ -34,7 +34,7 @@ primary key(id)
 select * from cupcakes;
 
 insert into cupcakes(name, cover_image, description, dough, filling, cover, decoration) 
-values("Cupcake Doce De Leite", "public/images/flavors/cupcake.png", "Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas", 3, 4, 5, 6);
+values("Cupcake Doce De Leite", "/public/images/flavors/cupcake.png", "Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas", 3, 4, 5, 6);
 
 select cupcakes.*, a.name as dough_name, b.name as filling_name, c.name as cover_name, d.name as decoration_name
 from cupcakes
@@ -97,19 +97,39 @@ delivery_date TIMESTAMP,
 client_id int not null,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+foreign key(client_id) references user(id),
 primary key(id) 
 );
+
+select * from orders;
+insert into orders(delivery_date, client_id) values();
 
 create table orders_items(
 id int not null auto_increment,
 order_id int not null,
 cupcake_id int not null,
 quantity int not null,
+unity_price real not null,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 foreign key(cupcake_id) references cupcakes(id),
 primary key(id) 
 );
+
+select * from orders_items;
+
+insert into orders_items(order_id, cupcake_id, quantity, unity_price) values();
+
+
+select cupcakes.*,
+sum(a.selling_price + b.selling_price + c.selling_price) as selling_price
+from cupcakes
+join ingredients a on cupcakes.dough = a.id
+join ingredients b on cupcakes.filling = b.id
+join ingredients c on cupcakes.cover = c.id
+join ingredients d on cupcakes.decoration = d.id
+where cupcakes.id = 1
+group by id;
 
 
 

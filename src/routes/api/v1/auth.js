@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
-    res.cookie('acessToken', '', {maxAge: 1, httpOnly: true}).status(200).json(
+    res.cookie('accessToken', '', {maxAge: 1, httpOnly: true}).status(200).json(
         {
             method: "GET",
             error: false,

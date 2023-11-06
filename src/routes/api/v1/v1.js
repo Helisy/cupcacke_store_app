@@ -28,4 +28,7 @@ router.use("/ingredient", ingredientRouter);
 const userRouter = require('./user.js');
 router.use("/user", userRouter);
 
+const ordersRouter = require('./orders.js');
+router.use("/orders", ordersRouter);
+
 module.exports = router;

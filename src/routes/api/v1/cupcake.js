@@ -12,7 +12,7 @@ const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
     //DO search
 
     const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
@@ -98,7 +98,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
 
 
-router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
+router.get('/:id', param('id').isInt(), async (req, res) => {
     const id = req.params.id;
 
     const result = validationResult(req);
