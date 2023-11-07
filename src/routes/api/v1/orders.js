@@ -42,7 +42,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 router.get('/current', verifyToken, async (req, res) => {
-    const [rows_1] = await db.execute(`select * from orders where client_id = ${req.user.userId};`);
+    const [rows_1] = await db.execute(`select * from orders where client_id = ${req.user.userId} order by id desc;`);
 
     var info = rows_1;
 
@@ -74,7 +74,7 @@ router.get('/current', verifyToken, async (req, res) => {
 
 router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
     const id = req.params.id;
-    const [rows_1] = await db.execute(`select * from orders where id = ${id};`);
+    const [rows_1] = await db.execute(`select * from orders where id = ${id} order by id desc;`);
 
     var info = rows_1;
 
