@@ -118,54 +118,141 @@
         .data-body > div
         {
             width: 100%;
-            height: calc(100% - 2.5rem);
-            overflow: scroll;
+            /* height: calc(100% - 2.5rem);   */
+            height: 26.7rem;
+            overflow: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .card
         {
-            
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            width: calc(50% - .5rem);
+            overflow: hidden;
+            height: fit-content;
+        }
+
+        .card > div:nth-child(1)
+        {
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem 1rem;
+            color: white;
+            background-color: black;
+        }
+
+        .card > div:nth-child(2)
+        {
+            padding: 1rem;
+        }
+
+        .card .value > div
+        {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: .1rem;
+        }
+
+        .card .value a
+        {
+            white-space: nowrap; 
+            width: 15rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-decoration: none;
+            color: black;
+        }
+
+        .card .value span
+        {
+            width: 5rem;
+            text-align: end;
+        }
+
+        .card .status
+        {
+            margin-top: 1rem;
+        }
+        
+        .card .status > div:nth-child(1) 
+        {
+            background-color: aliceblue;
+            margin-top: 1rem;
+        }
+
+        .card .status > div:nth-child(1) > div
+        {
+            width: 100%;
+            height: .4rem;
+            outline: 2px solid rgba(0, 0, 0, 0.116);
+            border-radius: .5rem;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .card .status > div:nth-child(1) > div > div
+        {
+            /* width: 56%; */
+            height: 100%;
+            /* background-color: rebeccapurple; */
+            background: rgb(131,58,180);
+            background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        }
+
+        .card .status > div:nth-child(2)
+        {
+            display: flex;
+            justify-content: space-between;
+            font-size: .8rem;
+            margin-top: .2rem;
+            font-weight: 900;
+        }
+
+        .logout
+        {
+            font-size: 1rem!important;
+            color: red;
+            font-weight: 900;
+            text-decoration: none!important;
         }
 
 
-
-
-
-
-
-/* 
-        .content > div input
-        {
-
-            gap: .5rem;
-            font-size: 1.2rem;
-            padding: .5rem;
-            border-radius: .4rem;
-            border: none;
-            border: 2px solid black;
-        } */
-        
-        /* .content > div button
-        {
-            background-color: black;
-            font-size: 1.3rem;
-            cursor: pointer;
-            outline: none;
-            border: none;
-            border-radius: .4rem;
-            color: white;
-            padding: .5rem;
-        } */
-
-/* 
         @media only screen and (max-width: 600px) 
         {
             .content > div
             {
+                width: calc(100% - 4rem);
+                display: grid;
+                grid-template-columns: 100%;
+                height: fit-content;
+            } 
+
+            .data-body
+            {
+                margin-left: 0;
+            }
+
+            .data-body > div
+            {
                 width: 100%;
-                margin: 1rem;
-            }   
-        } */
+                /* height: calc(100% - 2.5rem);   */
+                height: 27rem;
+                overflow: auto;
+            }
+
+            .card
+            {
+                background-color: white;
+                box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+                border-radius: .4rem;
+                width: 100%;
+                overflow: hidden;
+            }
+        } 
         
     </style>
 </head>
@@ -194,8 +281,9 @@
                 <div>
                     <div>
                         <h3>Gabriela Elise</h3>
-                    <h5>Dias da Silva</h5>
-                    <p>helisy@dev.com</p>
+                        <h5>Dias da Silva</h5>
+                        <span class="logout">Sair da Conta</span>
+                        <p>helisy@dev.com</p>
                     <ul>
                         <li>Rua Dom Dinis, 126</li>
                         <li>Parque dos Príncipes</li>
@@ -212,9 +300,37 @@
                 <div class="data-body" id="user_data_body">
                     <h3>Pedidos</h3>
                     <div>
-                        <div class="card">
-
-                        </div>
+                        <!-- <div class="card">
+                            <div>
+                                <h3>Pedido</h3>
+                                <h3>#0001</h3>
+                            </div>
+                            <div>
+                                <div class="value">
+                                    <div>
+                                        <a href="">1x Cupcake Doce De Leite</a><span>R$ 5,25</span>                        
+                                    </div>
+                                    <div>
+                                        <a href="">1x Cupcake Doce De Leite</a><span>R$ 5,25</span>                        
+                                    </div>
+                                    <div>
+                                        <a href="">Entrega</a><span>R$ 0,00</span>
+                                    </div>
+                                </div>
+                                <div class="status">
+                                    <div>
+                                        <div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span>Preparo</span>
+                                        <span>Entrega</span>
+                                    </div>
+                                    <h6>Previsão de entrega: 2023/02/03</h6>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -227,6 +343,114 @@
     <%- include('../modules/mobile-menu.ejs'); -%>
     <script src="/public/scripts/loadCart.js"></script>
     <script>
+        const user_data_body = document.querySelector("#user_data_body")
+
+        var client_status_id = 0;
+
+        switch (client_status_id) {
+            case 0:
+            loadOrders()
+                break;
+        
+            default:
+                break;
+        }
+
+
+        async function loadOrders() {
+            var orders = await fetchInfo(`/api/v1/orders/current`);
+
+            newHtml = "<h3>Pedidos</h3><div>";
+
+            for (let i = 0; i < orders.data.length; i++) {
+                newHtml += `
+                <div class="card">
+                    <div>
+                        <h3>Pedido</h3>
+                        <h3>#${convCount(orders.data[i].id)}</h3>
+                    </div>
+                    <div>
+                        <div class="value">
+                            #ITEMS#
+                            <div>
+                                <a href="">Entrega</a><span>R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status">
+                            <div>
+                                <div>
+                                    <div style="width: ${randomIntFromInterval(56, 80)}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <span>Preparo</span>
+                                <span>Entrega</span>
+                            </div>
+                            <h6>Previsão de entrega: ${corDate(orders.data[i].delivery_date)}</h6>
+                        </div>
+                    </div>
+                </div>
+                `
+
+                var items_html = ""
+
+                for (let j = 0; j < orders.data[i].items.length; j++) {
+                    var cupcake = await fetchInfo(`/api/v1/cupcake/${orders.data[i].items[j].cupcake_id}`);
+
+                    items_html += `
+                    <div>
+                        <a href="">${orders.data[i].items[j].quantity}x ${cupcake.data.name}</a><span>${formatter.format(orders.data[i].items[j].quantity * orders.data[i].items[j].unity_price)}</span>                        
+                    </div>
+                    `;
+                    
+                }
+
+                newHtml = newHtml.replace("#ITEMS#", items_html);
+            }
+
+
+
+
+
+
+            newHtml += "</div>";
+
+            user_data_body.innerHTML = newHtml;
+        }
+
+        function randomIntFromInterval(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+
+        function corDate(date){
+            var date = date.split(".")[0]
+            date = date.split("T");
+
+            var day = date[0].split("-")
+            return `${day[2]}/${day[1]}/${day[0]} ${date[1]}`;
+        }
+
+        function convCount(count)
+        {
+            var newValue = "";
+            if(count < 10)
+            {
+                newValue = "000" + count;
+                return newValue;
+            }else if(count < 100)
+            {
+                newValue = "00" + count;
+                return newValue;
+            }else if(count < 1000)
+            {
+                newValue = "0" + count;
+                return newValue;
+            }else
+            {
+                newValue = "" + count;
+                return newValue;
+            }
+        }
 
         loadCart();
     </script>

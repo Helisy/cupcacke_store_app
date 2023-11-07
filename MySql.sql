@@ -97,7 +97,7 @@ delivery_date TIMESTAMP,
 client_id int not null,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-foreign key(client_id) references user(id),
+foreign key(client_id) references users(id),
 primary key(id) 
 );
 
