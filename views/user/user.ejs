@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake Store</title>
+    <script src="https://kit.fontawesome.com/581b6d46b3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/styles/global.css">
+    <link rel="stylesheet" href="/public/styles/nav-bar.css">
+    <link rel="stylesheet" href="/public/styles/mobile-menu.css">
+    <link rel="stylesheet" href="/public/styles/cart.css">
+    <link rel="stylesheet" href="/public/styles/popup.css">
+    <script src="/public/scripts/popup.js" defer></script>
+    <script src="/public/scripts/cart.js" defer></script>
+    <script src="/public/scripts/http_helper.js"></script>
+    <style>
+        .content
+        {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .content > div
+        {
+            background-color: white;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            border-radius: .4rem;
+            padding: 1rem;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+            width: 100%;
+            height: 30rem;
+            display: grid;
+            grid-template-columns: 20% 80%;
+        }
+
+        
+        .content > div > div:nth-child(1) > div:nth-child(1)
+        {
+            width: 100%;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(1) > h5
+        {
+            margin-bottom: .5rem;
+            border-bottom: 1px solid rgb(192, 192, 192);
+            padding-bottom: .5rem;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(1) > p
+        {
+            margin-bottom: .5rem;
+            border-bottom: 1px solid rgb(192, 192, 192);
+            padding-bottom: .5rem;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(1) > ul
+        {
+            list-style: none;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(1) > span
+        {
+            font-size: .8rem;
+            text-decoration: underline;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(2)
+        {
+            border-top: 1px solid rgb(192, 192, 192);
+            width: 100%;
+           margin-top: .5rem;
+            padding: .5rem 0;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(2)
+        {
+            border-top: 1px solid rgb(192, 192, 192);
+            width: 100%;
+            margin-top: .5rem;
+            padding: .5rem 0;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(2) > h4
+        {
+            padding: .5rem;
+            cursor: pointer;
+        }
+
+        .content > div > div:nth-child(1) > div:nth-child(2) > h4.selected
+        {
+            background-color: black;
+            color: white;   
+            border-radius: .1rem;
+            
+        }
+
+        .data-body
+        {
+            margin-left: 1rem;
+            background-color: var(--background);
+            border-radius: .4rem;
+            padding: .5rem;
+            box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.3) inset;
+          
+        }
+
+        .data-body > h3
+        {
+            border-bottom: 2px solid rgb(0, 0, 0);
+            padding-bottom: .3rem;
+            margin-bottom: .5rem;
+        }
+
+        .data-body > div
+        {
+            width: 100%;
+            height: calc(100% - 2.5rem);
+            overflow: scroll;
+        }
+
+        .card
+        {
+            
+        }
+
+
+
+
+
+
+
+/* 
+        .content > div input
+        {
+
+            gap: .5rem;
+            font-size: 1.2rem;
+            padding: .5rem;
+            border-radius: .4rem;
+            border: none;
+            border: 2px solid black;
+        } */
+        
+        /* .content > div button
+        {
+            background-color: black;
+            font-size: 1.3rem;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: .4rem;
+            color: white;
+            padding: .5rem;
+        } */
+
+/* 
+        @media only screen and (max-width: 600px) 
+        {
+            .content > div
+            {
+                width: 100%;
+                margin: 1rem;
+            }   
+        } */
+        
+    </style>
+</head>
+<body>
+    <%- include('../modules/nav-bar.ejs'); -%>
+    <div class="cart" id="cart_menu">
+        <div>
+            <i class="fa-solid fa-xmark" id="cart_close"></i>
+            <div class="cart_items">
+              
+            </div>
+            <div>
+                <div >
+                    <h3>Total</h3><h3 id="cart_price"></h3>
+                </div>
+                <button onclick="window.location.replace('/cart')">Comprar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="popup">
+            <h3></h3>
+        </div>
+        <div class="content">
+            <div>
+                <div>
+                    <div>
+                        <h3>Gabriela Elise</h3>
+                    <h5>Dias da Silva</h5>
+                    <p>helisy@dev.com</p>
+                    <ul>
+                        <li>Rua Dom Dinis, 126</li>
+                        <li>Parque dos Príncipes</li>
+                        <li>Jacareí - SP</li>
+                    </ul>
+                    <span>Alterar Endereço</span>
+                    </div>
+                    <div>
+                        <h4 class="selected">Pedidos</h4>
+                        <h4>Cupons</h4>
+                        <h4>Favoritos</h4>
+                    </div>
+                </div>
+                <div class="data-body" id="user_data_body">
+                    <h3>Pedidos</h3>
+                    <div>
+                        <div class="card">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+
+    </div>
+    </div>
+    <%- include('../modules/mobile-menu.ejs'); -%>
+    <script src="/public/scripts/loadCart.js"></script>
+    <script>
+
+        loadCart();
+    </script>
+</body>
+</html>
