@@ -13,9 +13,33 @@ const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
 router.get('/', async (req, res) => {
-    //DO search
+    const { q } = req.query;
 
-    const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
+    var rows_1;
+    if(!q){
+        const [rows] = await db.execute(`select * from cupcakes order by id desc`);
+        rows_1 = rows;
+    }else{
+        var query = q.replaceAll("'", '"')
+
+        const [rows] = await db.execute(`
+        select cupcakes.*, a.name as dough_name, b.name as filling_name, c.name as cover_name, d.name as decoration_name
+        from cupcakes
+        join ingredients as a on cupcakes.dough = a.id
+        join ingredients as b on cupcakes.filling = b.id
+        join ingredients as c on cupcakes.cover = c.id
+        join ingredients as d on cupcakes.decoration = d.id
+        WHERE 
+        MATCH (cupcakes.name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE) or
+        MATCH (a.name, a.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE) or
+        MATCH (b.name, b.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE) or
+        MATCH (c.name, c.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE) or
+        MATCH (d.name, d.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE);
+        `);
+        rows_1 = rows;
+    }
+
+   
 
     var data = rows_1;
 
@@ -65,6 +89,21 @@ const registerValidation = require("../../../validation/cupcake/register_cupcake
 
 router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
     const { name, cover_image, description, dough_id, filling_id, cover_id, decoration_id } = req.body;
+
+    if(req.user.role != "admin"){
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 401,
+            message: "You are not authorized to access this resource.",
+            details: "Unauthorized"
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
 
     const result = validationResult(req);
     if (!result.isEmpty()) {

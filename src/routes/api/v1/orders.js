@@ -74,6 +74,23 @@ router.get('/current', verifyToken, async (req, res) => {
 
 router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
     const id = req.params.id;
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 400,
+            message: "Incorrect param entry.",
+            details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
     const [rows_1] = await db.execute(`select * from orders where id = ${id} order by id desc;`);
 
     var info = rows_1;

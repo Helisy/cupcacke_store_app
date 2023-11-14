@@ -282,7 +282,7 @@
                     <div>
                         <h3>Gabriela Elise</h3>
                         <h5>Dias da Silva</h5>
-                        <span class="logout">Sair da Conta</span>
+                        <span class="logout" id="logout">Sair da Conta</span>
                         <p>helisy@dev.com</p>
                     <ul>
                         <li>Rua Dom Dinis, 126</li>
@@ -343,7 +343,16 @@
     <%- include('../modules/mobile-menu.ejs'); -%>
     <script src="/public/scripts/loadCart.js"></script>
     <script>
-        const user_data_body = document.querySelector("#user_data_body")
+        const user_data_body = document.querySelector("#user_data_body");
+        const logout = document.querySelector("#logout");
+
+        logout.addEventListener('click', async e => {
+            const response = await fetchInfo(`/api/v1/auth/logout`);
+
+            if(response.error == false){
+                window.location.href = "/";
+            }
+        });
 
         var client_status_id = 0;
 
@@ -402,7 +411,6 @@
                         <a href="">${orders.data[i].items[j].quantity}x ${cupcake.data.name}</a><span>${formatter.format(orders.data[i].items[j].quantity * orders.data[i].items[j].unity_price)}</span>                        
                     </div>
                     `;
-                    
                 }
 
                 newHtml = newHtml.replace("#ITEMS#", items_html);

@@ -120,6 +120,40 @@ select * from orders_items;
 
 insert into orders_items(order_id, cupcake_id, quantity, unity_price) values();
 
+create table coupons(
+id int not null auto_increment,
+name varchar(255) not null,
+description varchar(255) not null,
+discount real not null,
+is_percentage boolean not null,
+minimum_value real not null,
+expires_in datetime not null,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+primary key(id) 
+);
+
+select * from coupons where id = 1;
+insert into coupons(name, description, discount, is_percentage, minimum_value, expires_in) values ("BEMVINDO5", "5% de desconto em todos os cupcakes após uma compra acima de R$ 100,00.", 5, true, 5,"2030-12-30 12:00:00");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 select cupcakes.*,
 sum(a.selling_price + b.selling_price + c.selling_price) as selling_price
@@ -130,6 +164,55 @@ join ingredients c on cupcakes.cover = c.id
 join ingredients d on cupcakes.decoration = d.id
 where cupcakes.id = 1
 group by id;
+
+create fulltext index cupcake_search on cupcakes(name);
+create fulltext index ingredient_seacrh on ingredients(name, ingredients);
+# ALTER TABLE answers ADD FULLTEXT(category);
+SELECT * FROM answers WHERE MATCH (title, body, category) AGAINST ('abri lata de milho' IN NATURAL LANGUAGE MODE);
+
+#correct querry
+select cupcakes.*, a.name as dough_name, b.name as filling_name, c.name as cover_name, d.name as decoration_name
+from cupcakes
+join ingredients as a on cupcakes.dough = a.id
+join ingredients as b on cupcakes.filling = b.id
+join ingredients as c on cupcakes.cover = c.id
+join ingredients as d on cupcakes.decoration = d.id
+WHERE 
+MATCH (cupcakes.name) AGAINST ('essência de baunilha' IN NATURAL LANGUAGE MODE) or
+MATCH (a.name, a.ingredients) AGAINST ('essência de baunilha' IN NATURAL LANGUAGE MODE) or
+MATCH (b.name, b.ingredients) AGAINST ('essência de baunilha' IN NATURAL LANGUAGE MODE) or
+MATCH (c.name, c.ingredients) AGAINST ('essência de baunilha' IN NATURAL LANGUAGE MODE) or
+MATCH (d.name, d.ingredients) AGAINST ('essência de baunilha' IN NATURAL LANGUAGE MODE);
+#correct querry
+
+
+select * FROM ingredients where match (name, ingredients) AGAINST ('soja' IN NATURAL LANGUAGE MODE);
+
+select * from 
+(
+	select cupcakes.* from cupcakes where MATCH (cupcakes.name) AGAINST ('soja' IN NATURAL LANGUAGE MODE) as dog
+    inner join ingredients as a on cupcakes.dough = a.id
+) as e;
+
+
+select cupcakes.* from cupcakes MATCH (cupcakes.name) AGAINST ('soja' IN NATURAL LANGUAGE MODE) dog;
+
+SELECT
+course_id, course_code, course_name, course_descript, course_detail,
+MATCH (course_name, course_descript, course_detail)
+AGAINST ('$string')
+AS score;
+
+select * from
+(
+select cupcakes.*, MATCH (name) AGAINST ('leite' IN NATURAL LANGUAGE MODE) as score 
+from cupcakes
+where MATCH (name) AGAINST ('leite' IN NATURAL LANGUAGE MODE) 
+) as e
+join ingredients as c on e.cover = c.id;
+
+
+
 
 
 

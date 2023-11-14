@@ -31,4 +31,7 @@ router.use("/user", userRouter);
 const ordersRouter = require('./orders.js');
 router.use("/orders", ordersRouter);
 
+const couponRouter = require('./coupon.js');
+router.use("/coupon", couponRouter);
+
 module.exports = router;

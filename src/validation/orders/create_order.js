@@ -4,7 +4,10 @@ module.exports =
     {
         isISO8601: {
             errorMessage: 'The delivery_date field must be datetime.',
-        }
+        },
+        notEmpty: {
+            errorMessage: 'Empty field.',
+        },
     },
     items: 
     {

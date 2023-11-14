@@ -42,6 +42,22 @@ const registerValidation = require("../../../validation/ingredient/register_ingr
 router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
     var { type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme } = req.body;
 
+    if(req.user.role != "admin"){
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 401,
+            message: "You are not authorized to access this resource.",
+            details: "Unauthorized"
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+
     if(!theme) theme = null;
     if(!contains_allergens) contains_allergens = 1;
     if(!is_vegan) is_vegan = 0;

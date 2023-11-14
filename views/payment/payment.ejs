@@ -107,10 +107,38 @@
             display: none;
         }
 
+        .cupom-field 
+        {
+            display: flex;
+            flex-direction: row!important;
+            align-items: stretch!important;
+            justify-content: start!important;
+        }
+
+        .cupom-field > input
+        {
+            margin-right: .5rem;
+            border-radius: .4rem;
+            outline: 2px solid black;
+            border: none;
+        }
+
+        .cupom-field > button
+        {
+            background-color: black;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: .4rem;
+            color: white;
+            padding: .5rem;
+        }
+
         .itens
         {
             width: calc(100% - 2rem)!important;
-            
+            padding: 0 1rem;
         }
 
         .itens > span
@@ -244,6 +272,9 @@
             <div>
                 <div>
                     <i class="fa-solid fa-truck"></i></i><h3>Itens de Compra</h3>
+                </div>
+                <div id="cupom_field" class="cupom-field">
+                    <input type="text"><button>Adicionar</button>
                 </div>
                 <div class="itens" id="item_content">
                     <!-- <h4>Itens Adicionados</h4>
