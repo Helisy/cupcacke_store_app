@@ -11,23 +11,45 @@ const db = database();
 const { verifyToken } = require('../../../middleware/authMiddleware');
 
 router.get('/', verifyToken, async (req, res) => {
+    const { q } = req.query;
 
-    if(req.user.role != "admin"){
-        return res.json({
-            method: "GET",
-            error: true,
-            code: 401,
-            message: "You are not authorized to access this resource.",
-            details: "Unauthorized"
-            ,
-            hints: [
-            ],
-            links: [
-            ]
-        })
+    var rows_1;
+
+    if(!q){
+        if(req.user.role != "admin"){
+            return res.json({
+                method: "GET",
+                error: true,
+                code: 401,
+                message: "You are not authorized to access this resource.",
+                details: "Unauthorized"
+                ,
+                hints: [
+                ],
+                links: [
+                ]
+            })
+        }
+
+        const [rows] = await db.execute(`select * from coupons;`);
+        rows_1 = rows;
+    }else{
+        var query = q.replaceAll("'", '"')
+        const [rows] = await db.execute(`select * from coupons where name = '${query}';`);
+        rows_1 = rows;
     }
 
-    const [rows_1] = await db.execute(`select * from coupons;`);
+
+    if(!q){
+        const [rows] = await db.execute(`select * from coupons;`);
+        rows_1 = rows;
+    }else{
+        var query = q.replaceAll("'", '"')
+        const [rows] = await db.execute(`select * from coupons where name = '${query}';`);
+        rows_1 = rows;
+    }
+
+    
 
     res.status(201).json(
         {

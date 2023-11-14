@@ -121,8 +121,10 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
 
 const crate_order_verification = require("../../../validation/orders/create_order");
 router.post('/', verifyToken, checkSchema(crate_order_verification), async (req, res) => {
-    const {delivery_date, items} = req.body;
+    const {delivery_date, items, coupon} = req.body;
     // const [rows_1] = await db.execute(`select * from ingredients order by id desc`)
+
+
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -145,9 +147,17 @@ router.post('/', verifyToken, checkSchema(crate_order_verification), async (req,
     const [rows_1] = await db.execute(`select * from orders order by id desc limit 1`);
 
     for (let i = 0; i < items.length; i++) {
-        const [rows_2] = await db.execute(`select cupcakes.*, sum(a.selling_price + b.selling_price + c.selling_price) as selling_price from cupcakes join ingredients a on cupcakes.dough = a.id join ingredients b on cupcakes.filling = b.id join ingredients c on cupcakes.cover = c.id join ingredients d on cupcakes.decoration = d.id where cupcakes.id = ${items[i].product_id} group by id;`);
+        const [rows_2] = await db.execute(`select cupcakes.*, sum(a.selling_price + b.selling_price + c.selling_price + d.selling_price) as selling_price from cupcakes join ingredients a on cupcakes.dough = a.id join ingredients b on cupcakes.filling = b.id join ingredients c on cupcakes.cover = c.id join ingredients d on cupcakes.decoration = d.id where cupcakes.id = ${items[i].product_id} group by id;`);
+        var discValue = 0;
+        if(coupon){
+            if(coupon.is_percentage == 1){
+                discValue = rows_2[0].selling_price - (rows_2[0].selling_price * (coupon.discount / 100));
+            }else{
+                discValue = rows_2[0].selling_price - (coupon.discount / items.length);
+            }
+        }
 
-        db.execute(`insert into orders_items(order_id, cupcake_id, quantity, unity_price) values(?, ?, ?, ?);`, [rows_1[0].id, items[i].product_id, items[i].quantity, rows_2[0].selling_price]);
+        db.execute(`insert into orders_items(order_id, cupcake_id, quantity, unity_price) values(?, ?, ?, ?);`, [rows_1[0].id, items[i].product_id, items[i].quantity, discValue]);
     }
 
     res.status(201).json(

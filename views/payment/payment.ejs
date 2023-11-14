@@ -323,7 +323,19 @@
     const order = document.querySelector("#order");
     const date_delivery = document.querySelector("#date_delivery");
 
+    const cupom_field = document.querySelector("#cupom_field");
+
     var chooseDate = new Boolean(false);
+
+    var coupon;
+    
+    cupom_field.children[1].addEventListener('click', async e => {
+        var coupon_sel = await fetchInfo(`/api/v1/coupon?q=${cupom_field.children[0].value}`);
+
+        coupon = coupon_sel.data[0];
+        await init()
+    });
+
 
     order.addEventListener('click', async e => {
         var deliv_date;
@@ -376,7 +388,8 @@
 
         const res = await postData('/api/v1/orders/', "post",{
             delivery_date: deliv_date,
-            items: newCart
+            items: newCart,
+            coupon: coupon
            });
 
            if(res.error){
@@ -433,15 +446,56 @@
             total += items[i].selling_price * items[i].item_quantity;
         }
 
-        item_content.innerHTML = `
-        <h4>Itens Adicionados</h4>
-        <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
-        <span><p>Grátis:</p><p>R$ 0,0</p></span>
-        <div>
-            <p>${formatter.format(total)}</p>
-            <p>ou até 3x de ${formatter.format(total / 3)}</p>
-        </div>
-        `;
+        var discValue = 0;
+
+        if(coupon){
+
+            if(coupon.minimum_value > total){
+                item_content.innerHTML = `
+                <h4>Itens Adicionados</h4>
+                <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
+                <span><p>Grátis:</p><p>R$ 0,0</p></span>
+                <div>
+                    <p>${formatter.format(total)}</p>
+                    <p>ou até 3x de ${formatter.format(total / 3)}</p>
+                </div>
+                `;
+
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "O valor mínimo não foi atingido."
+                return;
+            }
+
+            if(coupon.is_percentage == true){
+
+                discValue = (total * (coupon.discount / 100))
+            }else{
+                discValue = coupon.discount
+            }
+
+            item_content.innerHTML = `
+            <h4>Itens Adicionados</h4>
+            <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
+            <span><p>Cupom:</p><p>- ${formatter.format(discValue)}</p></span>
+            <span><p>Grátis:</p><p>R$ 0,0</p></span>
+            <div>
+                <p>${formatter.format(total - discValue)}</p>
+                <p>ou até 3x de ${formatter.format(total / 3)}</p>
+            </div>
+            `;
+        }else{
+            item_content.innerHTML = `
+            <h4>Itens Adicionados</h4>
+            <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
+            <span><p>Grátis:</p><p>R$ 0,0</p></span>
+            <div>
+                <p>${formatter.format(total)}</p>
+                <p>ou até 3x de ${formatter.format(total / 3)}</p>
+            </div>
+            `;
+        }
+
+
     }
 
     init();
