@@ -24,10 +24,21 @@ module.exports = {
            }
         },
         isLength: {
-            options: { min: 3, max: 100 },
-            errorMessage: 'The value description must be at max 255 characters.',
+            options: { min: 3, max: 2000 },
+            errorMessage: 'The value description must be at max 2000 characters.',
         },
     }, 
+    category_id:
+    {
+        optional: {
+            options: {
+             nullable: true,
+            }
+        },
+        isInt: {
+            errorMessage: 'The value category_id must be an interger.',
+        },
+    },
     dough_id: {
         isInt: {
             errorMessage: 'The value dough_id must be an interger.',

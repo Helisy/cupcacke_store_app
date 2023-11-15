@@ -17,10 +17,10 @@ module.exports = {
     selling_price :{
         isFloat:{
             options: {
-                min: 2,
+                min: 0.1,
                 max: 100
             },
-            errorMessage: 'The value selling_price must be at least 1 and max 100.',
+            errorMessage: 'The value selling_price must be at least 0.1 and max 100.',
         },
         notEmpty: {
             errorMessage: 'Empty field.',
@@ -29,10 +29,10 @@ module.exports = {
     cost_price: {
         isFloat:{
             options: {
-                min: 0.25,
+                min: 0.1,
                 max: 100
             },
-            errorMessage: 'The value selling_price must be at least 0.25 and max 100.',
+            errorMessage: 'The value cost_price must be at least 0.1 and max 100.',
         },
         notEmpty: {
             errorMessage: 'Empty field.',

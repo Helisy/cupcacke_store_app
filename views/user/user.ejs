@@ -291,14 +291,14 @@
                     </ul>
                     <span>Alterar Endereço</span>
                     </div>
-                    <div>
-                        <h4 class="selected">Pedidos</h4>
-                        <h4>Cupons</h4>
-                        <h4>Favoritos</h4>
+                    <div id="nav_opt">
+                        <h4 onclick="switchTab(this, 0)" class="selected">Pedidos</h4>
+                        <h4 onclick="switchTab(this, 1)">Cupons</h4>
+                        <!-- <h4 onclick="switchTab(this, 2)">Favoritos</h4> -->
                     </div>
                 </div>
                 <div class="data-body" id="user_data_body">
-                    <h3>Pedidos</h3>
+                    <h3></h3>
                     <div>
                         <!-- <div class="card">
                             <div>
@@ -345,6 +345,7 @@
     <script>
         const user_data_body = document.querySelector("#user_data_body");
         const logout = document.querySelector("#logout");
+        const nav_opt = document.querySelector("#nav_opt");
 
         logout.addEventListener('click', async e => {
             const response = await fetchInfo(`/api/v1/auth/logout`);
@@ -356,13 +357,18 @@
 
         var client_status_id = 0;
 
-        switch (client_status_id) {
-            case 0:
-            loadOrders()
-                break;
-        
-            default:
-                break;
+
+        async function init(){
+            switch (client_status_id) {
+                case 0:
+                    await loadOrders()
+                    break;
+                case 1:
+                    await loadCoupon()
+                    break;
+                default:
+                    break;
+            }
         }
 
 
@@ -416,14 +422,34 @@
                 newHtml = newHtml.replace("#ITEMS#", items_html);
             }
 
-
-
-
-
-
             newHtml += "</div>";
 
             user_data_body.innerHTML = newHtml;
+        }
+
+        async function loadCoupon() {
+            var orders = await fetchInfo(`/api/v1/orders/current`);
+
+            newHtml = "<h3>Cupons</h3><div>";
+
+          
+            newHtml += "</div>";
+
+            user_data_body.innerHTML = newHtml;
+        }
+
+        init();
+
+        function switchTab(e, n){
+            client_status_id = n;
+
+            for (let i = 0; i < nav_opt.children.length; i++) {
+                nav_opt.children[i].classList.remove("selected");   
+            }
+
+            e.classList.add("selected");   
+
+            init();
         }
 
         function randomIntFromInterval(min, max) { // min and max included 

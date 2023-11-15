@@ -362,17 +362,23 @@
             mobile_menu_search.classList.toggle("open");
         })
         /***/
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('q');
+        const urlParams = window.location.pathname;
+        const param = urlParams.split("/");
 
         const search_res = document.querySelector("#search_res");
         const search_query = document.querySelector("#search_query");
         const category_holder = document.querySelector("#category_holder");
 
-        search_query.innerHTML = query;
+        search_query.innerHTML = param[2];
 
         async function init(){
-            var cupcakes = await fetchInfo(`/api/v1/cupcake?q=${query}`);
+            
+            var category = await fetchInfo(`/api/v1/category?q=${param[2]}`);
+            category = category.data[0];
+
+            console.log(category)
+
+            var cupcakes = await fetchInfo(`/api/v1/cupcake?category=${category.id}`);
             cupcakes = cupcakes.data;
 
             for (let i = 0; i < cupcakes.length; i++) {

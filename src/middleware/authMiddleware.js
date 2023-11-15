@@ -44,10 +44,10 @@ const checkToken = (req, res, next) => {
 const verifyToken = (req, res, next) => {
     const accessToken = req.headers['token'] || req.cookies.accessToken;
 
-    if(accessToken === undefined) return res.status(401).json({
+    if(!accessToken) return res.status(403).json({
         method: req.method,
         error: true,
-        code: 401,
+        code: 403,
         message: "An access token is needed to access this resource.",
         details: [
 
@@ -63,7 +63,7 @@ const verifyToken = (req, res, next) => {
         if (err) return res.status(403).json({
             method: req.method,
             error: true,
-            code: 401,
+            code: 403,
             message: "The access token provided is invalid.",
             details: [
 

@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { checkSchema, validationResult, param } = require('express-validator');
+const { checkSchema, validationResult, param, query } = require('express-validator');
 
 const express = require('express');
 const router = express.Router();
@@ -12,14 +12,11 @@ const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
 
-router.get('/', async (req, res) => {
-    const { q } = req.query;
+router.get('/', query('category').isInt(), async (req, res) => {
+    const { q, category } = req.query;
 
     var rows_1;
-    if(!q){
-        const [rows] = await db.execute(`select * from cupcakes order by id desc`);
-        rows_1 = rows;
-    }else{
+    if(q){
         var query = q.replaceAll("'", '"')
 
         const [rows] = await db.execute(`
@@ -36,6 +33,12 @@ router.get('/', async (req, res) => {
         MATCH (c.name, c.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE) or
         MATCH (d.name, d.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE);
         `);
+        rows_1 = rows;
+    }if(category){
+        const [rows] = await db.execute(`select * from cupcakes where category_id = ${category};`);
+        rows_1 = rows;
+    }else{
+        const [rows] = await db.execute(`select * from cupcakes order by id desc`);
         rows_1 = rows;
     }
 
@@ -88,7 +91,7 @@ router.get('/', async (req, res) => {
 const registerValidation = require("../../../validation/cupcake/register_cupcake");
 
 router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) => {
-    const { name, cover_image, description, dough_id, filling_id, cover_id, decoration_id } = req.body;
+    var { name, cover_image, description, category_id, dough_id, filling_id, cover_id, decoration_id } = req.body;
 
     if(req.user.role != "admin"){
         return res.json({
@@ -121,7 +124,9 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
         })
     }
 
-    await db.execute(`insert into cupcakes(name, cover_image, description, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?, ?);`, [name, cover_image, description, dough_id, filling_id, cover_id, decoration_id])
+    if(!category_id) category_id = null;
+
+    await db.execute(`insert into cupcakes(name, cover_image, description, category_id, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?, ?, ?);`, [name, cover_image, description, category_id, dough_id, filling_id, cover_id, decoration_id])
 
     res.status(200).json(
         {
@@ -204,24 +209,28 @@ router.get('/:id', param('id').isInt(), async (req, res) => {
     );
 });
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/:id/review', param('id').isInt(), async (req, res) => {
+    const id = req.params.id;
 
-    const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
-
-    var data = rows_1;
-
-    for (let i = 0; i < rows_1.length; i++) {
-        const [dough] = await db.execute(`select * from ingredients where id = ${rows_1[i].dough}`);
-        const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[i].filling}`);
-        const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[i].cover}`);
-        const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[i].decoration}`);
-
-        data[i].dough = dough[0];
-        data[i].filling = filling[0];
-        data[i].cover = cover[0];
-        data[i].decoration = decoration[0];
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 400,
+            message: "Incorrect param entry.",
+            details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
     }
 
+    const [rows_1] = await db.execute(`select reviews.*, users.first_name from reviews join users on users.id = user_id where cupcake_id = ${id}`)
+
+    
 
     res.status(200).json(
         {
@@ -229,12 +238,118 @@ router.get('/', verifyToken, async (req, res) => {
             error: false,
             code: 200,
             message: "",
-            data: data,
+            data: rows_1,
             links: [
             ]
         }
     );
 });
+
+const reviewValidation = require("../../../validation/cupcake/register_review");
+
+router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewValidation), async (req, res) => {
+    const { review } = req.body;
+    const id = req.params.id;
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.json({
+            method: "POST",
+            error: true,
+            code: 400,
+            message: "Incorrect entry.",
+            details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+    const [rows_1] = await db.execute(`select id from reviews where cupcake_id = ${id} and user_id = ${req.user.userId};`);
+
+    if(rows_1.length > 0){
+        return res.json({
+            method: "POST",
+            error: true,
+            code: 400,
+            message: "This user already reviwed this item.",
+            details: [
+
+            ],
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+    const [rows_2] = await db.execute(`select orders_items.* from orders_items join orders on order_id = orders.id where cupcake_id = ${id} and client_id = ${req.user.userId};`);
+
+    if(rows_2.length < 1){
+        return res.json({
+            method: "POST",
+            error: true,
+            code: 400,
+            message: "This user has not made a order yet.",
+            details: [
+                
+            ],
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+
+    await db.execute(`insert into reviews(review, cupcake_id, user_id) values(?, ?, ?);`, [review, id, req.user.userId])
+
+    res.status(200).json(
+        {
+            method: "GET",
+            error: false,
+            code: 201,
+            message: "Review created sucessfuly.",
+            data: [],
+            links: [
+            ]
+        }
+    );
+});
+
+// router.get('/', verifyToken, async (req, res) => {
+
+//     const [rows_1] = await db.execute(`select * from cupcakes order by id desc`)
+
+//     var data = rows_1;
+
+//     for (let i = 0; i < rows_1.length; i++) {
+//         const [dough] = await db.execute(`select * from ingredients where id = ${rows_1[i].dough}`);
+//         const [filling] = await db.execute(`select * from ingredients where id = ${rows_1[i].filling}`);
+//         const [cover] = await db.execute(`select * from ingredients where id = ${rows_1[i].cover}`);
+//         const [decoration] = await db.execute(`select * from ingredients where id = ${rows_1[i].decoration}`);
+
+//         data[i].dough = dough[0];
+//         data[i].filling = filling[0];
+//         data[i].cover = cover[0];
+//         data[i].decoration = decoration[0];
+//     }
+
+
+//     res.status(200).json(
+//         {
+//             method: "GET",
+//             error: false,
+//             code: 200,
+//             message: "",
+//             data: data,
+//             links: [
+//             ]
+//         }
+//     );
+// });
 
 
 

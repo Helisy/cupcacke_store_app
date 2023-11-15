@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/public/styles/mobile-menu.css">
     <link rel="stylesheet" href="/public/styles/cart.css">
     <link rel="stylesheet" href="/public/styles/most-ordered.css">
+    <link rel="stylesheet" href="/public/styles/hover-container.css">
+    <link rel="stylesheet" href="/public/styles/popup.css">
+    <script src="/public/scripts/popup.js" defer></script>
     <script src="/public/scripts/cart.js" defer></script>
     <script src="/public/scripts/http_helper.js"></script>
     <style>
@@ -150,6 +153,57 @@
             font-size: 2rem;
        }
 
+       .reviews
+       {
+            margin-bottom: 4rem;
+       }
+
+       .reviews > h3
+       {
+            margin-bottom: 1rem;
+       }
+
+       .reviews > button
+       {
+            background-color: black;
+            color: white;
+            border-radius: .4rem;
+            padding: .5rem;
+            border: none;
+            outline: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+       }
+
+       .reviews > div
+       {
+            width: 100%;   
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+       }
+
+       .review-card
+       {
+            background-color: white;
+            padding: .5rem;
+            border-radius: .4rem;
+            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+            height: 5rem;
+            width: calc(50% - 2rem);
+            overflow: auto;
+       }
+
+       .review-card h3
+       {
+            margin-bottom: .5rem;
+       }
+
+
+
        @media only screen and (max-width: 600px) 
         {
             .container
@@ -190,12 +244,65 @@
                 padding: 0 .5rem;
                 margin-bottom: 1rem;
             }
+
+            .reviews
+            {
+                padding: 0 .5rem;
+            }
+
+            .reviews > div
+            {
+                width: 100%;   
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .review-card
+            {
+                width: 100%;
+            }
         }
 
         .most-ordered-section 
         {
             padding: 0;
             padding-bottom: 1rem;
+        }
+
+        .hover-container
+        {
+            display: none;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .hover-container > span
+        {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .hover-container > textarea
+        {
+            border: none;
+            padding: .5rem;
+            border: 3px solid black;
+            border-radius: .4rem;
+            resize: none;
+        }
+
+        .hover-container > button
+        {
+            background-color: black;
+            color: white;
+            border-radius: .4rem;
+            padding: .5rem;
+            border: none;
+            outline: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -211,11 +318,19 @@
                 <div >
                     <h3>Total</h3><h3 id="cart_price"></h3>
                 </div>
-                <button onclick="window.location.replace('/cart')">Comprar</button>
+                <button onclick="window.location.href = '/cart'">Comprar</button>
             </div>
         </div>
     </div>
     <div class="container">
+        <div class="popup">
+            <h3></h3>
+        </div>
+        <div id="add_review" class="hover-container">
+            <span>fechar</span>
+            <textarea cols="30" rows="10" maxlength="255"></textarea>
+            <button>Avaliar</button>
+        </div>
         <div class="content">
             <div class="product">
                 <div>
@@ -252,7 +367,6 @@
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi beatae atque inventore voluptatum quasi libero doloribus quia suscipit, totam facere, nobis quisquam praesentium, id quas tenetur accusamus unde fuga quos?</p>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi beatae atque inventore voluptatum quasi libero doloribus quia suscipit, totam facere, nobis quisquam praesentium, id quas tenetur accusamus unde fuga quos?</p>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi beatae atque inventore voluptatum quasi libero doloribus quia suscipit, totam facere, nobis quisquam praesentium, id quas tenetur accusamus unde fuga quos?</p>
-
                 </div>
             </div>
             <div class="most-ordered-section" id="most_ordered_section">
@@ -270,6 +384,16 @@
                     </div>
                 </div>
             </div>
+            <div class="reviews">
+                <h3>Avaliações</h3>
+                <button id="make_review">Avalie esse produto</button>
+                <div id="review_body">
+                    <!-- <div class="review-card">
+                        <h3>Gabriela Elise</h3>
+                        <p>Mds foi a melhor coisa que ja comi na vida, comprem! super recomendo! </p>
+                    </div> -->
+                </div>
+            </div>
         </div>
     <div class="footer">
 
@@ -284,7 +408,9 @@
         const product_ingredients = document.querySelector('#product_ingredients');
         const product_price = document.querySelector('#product_price');
         const product_description = document.querySelector('#product_description');
-
+        const add_review = document.querySelector("#add_review");
+        const make_review = document.querySelector("#make_review");
+        const review_body = document.querySelector("#review_body");
 
         const nbr_inp = document.querySelector('.nbr_inp'); 
        
@@ -307,9 +433,39 @@
             product_price.innerHTML = `<h3>${formatter.format(cupcake.data.selling_price)}</h3>`;
 
             product_description.innerHTML = cupcake.data.description;
+
+
+            var reviews = await fetchInfo(`/api/v1/cupcake/${params[2]}/review`);
+            reviews = reviews.data;
+
+            for (let i = 0; i < reviews.length; i++) {
+                review_body.innerHTML += `
+                <div class="review-card">
+                    <h3>${reviews[i].first_name}</h3>
+                    <p>${reviews[i].review}</p>
+                </div>
+                `;
+            }           
         }
 
         init();
+
+        add_review.children[2].addEventListener('click', async e => {
+            const response = await postData(`/api/v1/cupcake/${params[2]}/review`, "post", {review: add_review.children[1].value});
+            
+            if(response.error == true && response.message.includes("order")){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Realize um pedido para poder avaliar."
+            }else if(response.error == true && response.message.includes("reviwed")){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Você ja fez uma avaliação."
+            }else if(response.code == 403){
+                popup.style.display = "unset";
+                popup.children[0].innerHTML = "Você precisa estar logado para avaliar esse produto."
+            }else{
+                window.location.reload();
+            }
+        });
 
         add_cart.addEventListener('click', e => {
             const cart_items = localStorage.getItem("cart_items");
@@ -366,13 +522,16 @@
             }
         });
 
+        
+        make_review.addEventListener('click', e => {
+            add_review.style.display = "flex";
+        });
 
-
+        add_review.children[0].addEventListener('click', e => {
+            add_review.style.display = "none";
+        });
 
         loadCart();
-
-
-
     </script>
 </body>
 </html>

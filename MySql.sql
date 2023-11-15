@@ -21,7 +21,8 @@ create table cupcakes(
 id int not null auto_increment,
 name varchar(255) not null,
 cover_image varchar(255) not null,
-description varchar(255),
+description text,
+category_id int,
 dough int not null,
 filling int not null,
 cover int not null,
@@ -32,6 +33,8 @@ primary key(id)
 );
 
 select * from cupcakes;
+
+select * from cupcakes where category_id = 1; 
 
 insert into cupcakes(name, cover_image, description, dough, filling, cover, decoration) 
 values("Cupcake Doce De Leite", "/public/images/flavors/cupcake.png", "Cupcake recheado com doce de leite, coberto de chantilly com estrelinhas rochas", 3, 4, 5, 6);
@@ -83,14 +86,6 @@ insert into ingredients(type, name, selling_price, cost_price, ingredients, weig
 
 select * from ingredients;
 
-create table kart(
-id int not null auto_increment,
-client_id int not null,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-primary key(id) 
-);
-
 create table orders(
 id int not null auto_increment,
 delivery_date TIMESTAMP,
@@ -138,14 +133,38 @@ insert into coupons(name, description, discount, is_percentage, minimum_value, e
 
 
 
+create table categories(
+id int not null auto_increment,
+name varchar(255) not null,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+primary key(id) 
+);
+
+select * from categories;
+
+insert into categories(name) values('?');
+
+create table reviews(
+id int not null auto_increment,
+review varchar(255) not null,
+cupcake_id int not null,
+user_id int not null,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+foreign key(cupcake_id) references cupcakes(id),
+foreign key(user_id) references users(id),
+primary key(id) 
+);
+
+insert into reviews(review, cupcake_id, user_id) values('Mds foi a melhor coisa que ja comi na vida, comprem! super recomendo!', 5, 1);
+
+select reviews.*, users.first_name from reviews join users on users.id = user_id where cupcake_id = 5;
+
+select id from reviews where cupcake_id = 5 and user_id = 1;
 
 
-
-
-
-
-
-
+select orders_items.* from orders_items join orders on order_id = orders.id where cupcake_id = 8 and client_id = 1;
 
 
 

@@ -203,7 +203,7 @@
                             <img src="${most_ordered_product.data[i].cover_image}" alt="">
                             <h3>${most_ordered_product.data[i].name}</h3>
                             <div>
-                                <h3>R$ ${most_ordered_product.data[i].selling_price.toString().replace(".", ",")}</h3>  <h3>R$ ${(most_ordered_product.data[i].selling_price + (most_ordered_product.data[i].selling_price * 0.15)).toFixed(2).replace(".", ",")}</h3>
+                                <h3>${formatter.format(most_ordered_product.data[i].selling_price)}</h3>  <h3>${formatter.format(most_ordered_product.data[i].selling_price + (most_ordered_product.data[i].selling_price * 0.15))}</h3>
                             </div>
                             <div>
                                 <button onClick="window.location.href = '/product/${most_ordered_product.data[i].id}'">Pedir</button>
