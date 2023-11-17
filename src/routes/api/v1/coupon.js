@@ -184,7 +184,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     await db.execute(`insert into coupons(name, description, discount, is_percentage, minimum_value, expires_in) values(?, ?, ?, ?, ?, ?);`, [name, description, discount, is_percentage, minimum_value, expires_in])
 
-    res.status(200).json(
+    res.status(201).json(
         {
             method: "POST",
             error: false,

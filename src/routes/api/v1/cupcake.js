@@ -128,7 +128,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     await db.execute(`insert into cupcakes(name, cover_image, description, category_id, dough, filling, cover, decoration) values(?, ?, ?, ?, ?, ?, ?, ?);`, [name, cover_image, description, category_id, dough_id, filling_id, cover_id, decoration_id])
 
-    res.status(200).json(
+    res.status(201).json(
         {
             method: "POST",
             error: false,
@@ -306,7 +306,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
 
     await db.execute(`insert into reviews(review, cupcake_id, user_id) values(?, ?, ?);`, [review, id, req.user.userId])
 
-    res.status(200).json(
+    res.status(201).json(
         {
             method: "GET",
             error: false,

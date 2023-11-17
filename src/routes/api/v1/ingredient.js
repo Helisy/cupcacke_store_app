@@ -80,7 +80,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     await db.execute(`insert into ingredients(type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme])
 
-    res.status(200).json(
+    res.status(201).json(
         {
             method: "GET",
             error: false,

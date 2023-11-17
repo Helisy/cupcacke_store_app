@@ -129,7 +129,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     await db.execute("insert into categories(name) values(?);", [name])
 
-    res.status(200).json(
+    res.status(201).json(
         {
             method: "POST",
             error: false,
