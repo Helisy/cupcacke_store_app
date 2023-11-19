@@ -15,6 +15,21 @@ router.get('/', verifyToken, async (req, res) => {
 
     var info = rows_1;
 
+    if(req.user.role != "admin"){
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 401,
+            message: "You are not authorized to access this resource.",
+            details: "Unauthorized"
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
     for (let i = 0; i < rows_1.length; i++) {
         const [rows_2] = await db.execute(`select * from orders_items where order_id = ${rows_1[i].id}`);
         info[i].items = rows_2;
@@ -83,6 +98,21 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
             code: 400,
             message: "Incorrect param entry.",
             details: result.array()
+            ,
+            hints: [
+            ],
+            links: [
+            ]
+        })
+    }
+
+    if(req.user.role != "admin"){
+        return res.json({
+            method: "GET",
+            error: true,
+            code: 401,
+            message: "You are not authorized to access this resource.",
+            details: "Unauthorized"
             ,
             hints: [
             ],
@@ -162,7 +192,7 @@ router.post('/', verifyToken, checkSchema(crate_order_verification), async (req,
 
     res.status(201).json(
         {
-            method: "GET",
+            method: "POST",
             error: false,
             code: 201,
             message: "",

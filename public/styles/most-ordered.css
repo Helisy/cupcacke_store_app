@@ -101,8 +101,14 @@
 
 @media only screen and (max-width: 600px) 
 {
+    .most-ordered-section
+    {
+        padding: .5rem!important;
+    }
+
     .most-ordered-section > div
     {
+      
         width: calc(100% - .5rem);
         display: grid;
         gap: .5rem;

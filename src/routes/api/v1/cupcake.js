@@ -12,8 +12,8 @@ const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
 
-router.get('/', query('category').isInt(), async (req, res) => {
-    const { q, category } = req.query;
+router.get('/', query('category').isInt(), query('dough').isInt(), query('filling').isInt(), query('cover').isInt() , query('decoration').isInt(), async (req, res) => {
+    const { q, category, dough, filling, cover, decoration} = req.query;
 
     var rows_1;
     if(q){
@@ -34,15 +34,28 @@ router.get('/', query('category').isInt(), async (req, res) => {
         MATCH (d.name, d.ingredients) AGAINST ('${query}' IN NATURAL LANGUAGE MODE);
         `);
         rows_1 = rows;
-    }if(category){
+        
+    }else if(category){
         const [rows] = await db.execute(`select * from cupcakes where category_id = ${category};`);
+        rows_1 = rows;
+    }else if(dough){
+        const [rows] = await db.execute(`select * from cupcakes where dough = ${dough};`);
+        rows_1 = rows;
+    }else if(filling){
+        const [rows] = await db.execute(`select * from cupcakes where filling = ${filling};`);
+        rows_1 = rows;
+    }else if(cover){
+        const [rows] = await db.execute(`select * from cupcakes where cover = ${cover};`);
+        rows_1 = rows;
+    }else if(decoration){
+        const [rows] = await db.execute(`select * from cupcakes where decoration = ${decoration};`);
         rows_1 = rows;
     }else{
         const [rows] = await db.execute(`select * from cupcakes order by id desc`);
         rows_1 = rows;
     }
 
-   
+
 
     var data = rows_1;
 
@@ -308,7 +321,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
 
     res.status(201).json(
         {
-            method: "GET",
+            method: "POST",
             error: false,
             code: 201,
             message: "Review created sucessfuly.",

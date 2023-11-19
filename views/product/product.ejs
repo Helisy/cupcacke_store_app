@@ -41,9 +41,9 @@
             border-radius: .4rem;
             padding: 1rem;
             font-family: 'Montserrat', sans-serif;
-            display: flex;
+            /* display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-between; */
        }
 
        .product > div:nth-child(2) h2
@@ -82,7 +82,7 @@
 
        .product > div:nth-child(2) > div
        {
-            height: 52%;
+            height: 68%;
             display: flex;
             flex-direction: column;
             justify-content: end;
@@ -125,6 +125,16 @@
             margin-bottom: 1rem;   
        }
 
+       .description p
+       {
+            font-family: 'Montserrat', sans-serif;
+       }
+
+       .description > h3:nth-child(3)
+       {
+            margin-top: .5rem;
+       }
+
        .nbr_inp
        {
             display: flex;
@@ -138,6 +148,7 @@
        {
             border: none;
             outline: none;
+            width: 100%;
        }
 
        .nbr_inp button
@@ -262,6 +273,15 @@
             {
                 width: 100%;
             }
+
+            .product div:nth-child(3) > div:nth-child(2) 
+            {
+                display: flex;
+                justify-content: space-between;
+                gap: 1rem;
+                flex-direction: column-reverse;
+                margin-top: 1rem;
+            }
         }
 
         .most-ordered-section 
@@ -303,6 +323,12 @@
             font-size: 1.5rem;
             font-weight: 600;
             cursor: pointer;
+        }
+
+        #product_description > p
+        {
+            padding-bottom: .5rem;
+            font-family: 'Montserrat', sans-serif;
         }
     </style>
 </head>
@@ -368,11 +394,13 @@
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi beatae atque inventore voluptatum quasi libero doloribus quia suscipit, totam facere, nobis quisquam praesentium, id quas tenetur accusamus unde fuga quos?</p>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi beatae atque inventore voluptatum quasi libero doloribus quia suscipit, totam facere, nobis quisquam praesentium, id quas tenetur accusamus unde fuga quos?</p>
                 </div>
+                <h3>Informações nutricionais</h3>
+                <p id="nutri_info"></p>
             </div>
             <div class="most-ordered-section" id="most_ordered_section">
                 <h3>Os mais pedidos</h3>
                 <div>
-                    <div class="product-card">
+                    <!-- <div class="product-card">
                         <img src="public/images/flavors/cupcake.png" alt="">
                         <h3>Cupcake Doce De Leite Recheado Com Amor</h3>
                         <div>
@@ -381,7 +409,7 @@
                         <div>
                             <button>Pedir</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="reviews">
@@ -411,8 +439,11 @@
         const add_review = document.querySelector("#add_review");
         const make_review = document.querySelector("#make_review");
         const review_body = document.querySelector("#review_body");
+        const nutri_info = document.querySelector("#nutri_info");
 
         const nbr_inp = document.querySelector('.nbr_inp'); 
+
+        const most_ordered_section = document.querySelector("#most_ordered_section > div")
        
 
         const add_cart = document.querySelector('#add_cart'); 
@@ -433,6 +464,58 @@
             product_price.innerHTML = `<h3>${formatter.format(cupcake.data.selling_price)}</h3>`;
 
             product_description.innerHTML = cupcake.data.description;
+
+            console.log(cupcake.data)
+
+
+            nutri_info.outerHTML = `
+            <p><b>Massa:</b> ${cupcake.data.dough.nutritional_info}<p>
+            <p><b>Recheio:</b> ${cupcake.data.filling.nutritional_info}<p>
+            <p><b>Cobertura:</b> ${cupcake.data.cover.nutritional_info}<p>
+            <p><b>Decoração:</b> ${cupcake.data.decoration.nutritional_info}<p>
+            <br>
+            <p><b>Calorias:</b> ${
+                cupcake.data.dough.calories +
+                cupcake.data.filling.calories +
+                cupcake.data.cover.calories +
+                cupcake.data.decoration.calories
+            }<p>
+            <p><b>Peso:</b> ${
+                cupcake.data.dough.weight +
+                cupcake.data.filling.weight +
+                cupcake.data.cover.weight +
+                cupcake.data.decoration.weight
+            } gramas<p>
+            `;
+
+
+
+            var most_ordered_product = await fetchInfo("/api/v1/cupcake");
+
+            most_ordered_product.data = most_ordered_product.data.slice(0, 4);
+            
+            var html = "";
+
+            for (let i = 0; i < most_ordered_product.data.length; i++) {
+                var newHtml = 
+                    `
+                    <div>
+                        <div class="product-card">
+                            <img src="${most_ordered_product.data[i].cover_image}" alt="">
+                            <h3>${most_ordered_product.data[i].name}</h3>
+                            <div>
+                                <h3>${formatter.format(most_ordered_product.data[i].selling_price)}</h3>  <h3>${formatter.format(most_ordered_product.data[i].selling_price + (most_ordered_product.data[i].selling_price * 0.15))}</h3>
+                            </div>
+                            <div>
+                                <button onClick="window.location.href = '/product/${most_ordered_product.data[i].id}'">Pedir</button>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                html += newHtml;
+            }
+
+            most_ordered_section.innerHTML += html;
 
 
             var reviews = await fetchInfo(`/api/v1/cupcake/${params[2]}/review`);

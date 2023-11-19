@@ -12,7 +12,6 @@ const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
 router.get('/', verifyToken, async (req, res) => {
-    //DO search
 
     const [rows_1] = await db.execute(`select * from ingredients order by id desc`)
 

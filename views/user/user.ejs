@@ -414,7 +414,7 @@
 
                     items_html += `
                     <div>
-                        <a href="">${orders.data[i].items[j].quantity}x ${cupcake.data.name}</a><span>${formatter.format(orders.data[i].items[j].quantity * orders.data[i].items[j].unity_price)}</span>                        
+                        <a href="/product/${cupcake.data.id}">${orders.data[i].items[j].quantity}x ${cupcake.data.name}</a><span>${formatter.format(orders.data[i].items[j].quantity * orders.data[i].items[j].unity_price)}</span>                        
                     </div>
                     `;
                 }

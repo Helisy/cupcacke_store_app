@@ -87,6 +87,9 @@ app.get('/category/:id', validateToken, (req, res) => {
 });
 
 
+app.use(checkToken, (req, res) => {
+    res.status(404).render("not_found.ejs", {username: req.user?.firstName});
+});
 
 
 app.listen(PORT, () => {
