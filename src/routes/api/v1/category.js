@@ -97,7 +97,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     const { name } = req.body;
 
     if(req.user.role != "admin"){
-        return res.json({
+        return res.status(401).json({
             method: "GET",
             error: true,
             code: 401,

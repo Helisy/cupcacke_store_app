@@ -16,7 +16,7 @@ router.get('/', verifyToken, async (req, res) => {
     var info = rows_1;
 
     if(req.user.role != "admin"){
-        return res.json({
+        return res.status(401).json({
             method: "GET",
             error: true,
             code: 401,
@@ -107,7 +107,7 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
     }
 
     if(req.user.role != "admin"){
-        return res.json({
+        return res.status(401).json({
             method: "GET",
             error: true,
             code: 401,

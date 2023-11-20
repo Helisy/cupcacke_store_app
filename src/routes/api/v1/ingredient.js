@@ -42,7 +42,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     var { type, name, selling_price, cost_price, ingredients, contains_allergens, is_vegan, weight, calories, nutritional_info, theme } = req.body;
 
     if(req.user.role != "admin"){
-        return res.json({
+        return res.status(401).json({
             method: "GET",
             error: true,
             code: 401,

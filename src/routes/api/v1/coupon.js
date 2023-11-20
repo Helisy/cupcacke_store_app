@@ -17,7 +17,7 @@ router.get('/', verifyToken, async (req, res) => {
 
     if(!q){
         if(req.user.role != "admin"){
-            return res.json({
+            return res.status(401).json({
                 method: "GET",
                 error: true,
                 code: 401,
@@ -121,7 +121,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     const { name, description, discount, is_percentage, minimum_value, expires_in } = req.body;
 
     if(req.user.role != "admin"){
-        return res.json({
+        return res.status(401).json({
             method: "GET",
             error: true,
             code: 401,
