@@ -162,7 +162,7 @@
         const register = document.querySelector("#register");
 
         adress_info.children[1].addEventListener("focusout", async e => {
-            var address = await fetchInfo(`https://viacep.com.br/ws/${adress_info.children[1].value}/json/`);
+            var address = await fetchInfo(`/api/v1/user/cep/${adress_info.children[1].value}`);
         
             if(Array.isArray(address)){
                 popup.style.display = "unset";
@@ -170,10 +170,10 @@
                 return;
             }
 
-            adress_info.children[3].value = address.logradouro
-            adress_info.children[4].value = address.bairro
-            adress_info.children[5].children[0].value = address.localidade
-            adress_info.children[5].children[1].value = address.uf
+            adress_info.children[3].value = address.data.logradouro
+            adress_info.children[4].value = address.data.bairro
+            adress_info.children[5].children[0].value = address.data.localidade
+            adress_info.children[5].children[1].value = address.data.uf
 
         })
 

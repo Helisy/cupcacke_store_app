@@ -417,7 +417,9 @@
 
     async function init(){
         var user_adress = await fetchInfo(`/api/v1/user/current/address`);
-        var address = await fetchInfo(`https://viacep.com.br/ws/${user_adress.data.address_cep}/json/`);
+
+        var address = await fetchInfo(`/api/v1/user/cep/${user_adress.data.address_cep}`);
+        address = address.data;
 
         address_info.innerHTML = `
         <ul>

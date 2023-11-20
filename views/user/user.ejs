@@ -279,17 +279,17 @@
         <div class="content">
             <div>
                 <div>
-                    <div>
-                        <h3>Gabriela Elise</h3>
+                    <div id="personal_info">
+                        <!-- <h3>Gabriela Elise</h3>
                         <h5>Dias da Silva</h5>
                         <span class="logout" id="logout">Sair da Conta</span>
                         <p>helisy@dev.com</p>
-                    <ul>
-                        <li>Rua Dom Dinis, 126</li>
-                        <li>Parque dos Príncipes</li>
-                        <li>Jacareí - SP</li>
-                    </ul>
-                    <span>Alterar Endereço</span>
+                        <ul>
+                            <li>Rua Dom Dinis, 126</li>
+                            <li>Parque dos Príncipes</li>
+                            <li>Jacareí - SP</li>
+                        </ul>
+                        <span>Alterar Endereço</span> -->
                     </div>
                     <div id="nav_opt">
                         <h4 onclick="switchTab(this, 0)" class="selected">Pedidos</h4>
@@ -344,21 +344,36 @@
     <script src="/public/scripts/loadCart.js"></script>
     <script>
         const user_data_body = document.querySelector("#user_data_body");
-        const logout = document.querySelector("#logout");
         const nav_opt = document.querySelector("#nav_opt");
 
-        logout.addEventListener('click', async e => {
-            const response = await fetchInfo(`/api/v1/auth/logout`);
+        const personal_info = document.querySelector("#personal_info");
 
-            if(response.error == false){
-                window.location.href = "/";
-            }
-        });
 
         var client_status_id = 0;
 
 
         async function init(){
+
+            
+            var users = await fetchInfo(`/api/v1/user/current`);
+            users = users.data;
+
+            var address = await fetchInfo(`/api/v1/user/cep/${users.address_cep}`);
+            address = address.data;
+
+            personal_info.innerHTML = `
+            <h3>${users.first_name}</h3>
+            <h5>${users.last_name}</h5>
+            <span class="logout" onClick="logout()">Sair da Conta</span>
+            <p>${users.email}</p>
+            <ul>
+                <li>${address.logradouro}, ${users.address_number}</li>
+                <li>${address.bairro}</li>
+                <li>${address.localidade} - ${address.uf} </li>
+            </ul>
+            <span>Alterar Endereço</span>
+            `;
+
             switch (client_status_id) {
                 case 0:
                     await loadOrders()
@@ -368,6 +383,15 @@
                     break;
                 default:
                     break;
+            }
+        }
+
+        async function logout()
+        {
+            const response = await fetchInfo(`/api/v1/auth/logout`);
+
+            if(response.error == false){
+                window.location.href = "/";
             }
         }
 
