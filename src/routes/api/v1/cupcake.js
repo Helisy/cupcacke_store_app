@@ -17,6 +17,7 @@ router.get('/', query('category').isInt(), query('dough').isInt(), query('fillin
 
     var rows_1;
     if(q){
+        console.log(q)
         var query = q.replaceAll("'", '"')
 
         const [rows] = await db.execute(`
