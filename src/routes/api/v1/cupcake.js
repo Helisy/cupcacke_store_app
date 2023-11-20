@@ -17,8 +17,7 @@ router.get('/', query('category').isInt(), query('dough').isInt(), query('fillin
 
     var rows_1;
     if(q){
-        console.log(q)
-        var query = q.replaceAll("'", '"')
+        var query = q.toString().replaceAll("'", '"')
 
         const [rows] = await db.execute(`
         select cupcakes.*, a.name as dough_name, b.name as filling_name, c.name as cover_name, d.name as decoration_name
