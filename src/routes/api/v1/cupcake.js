@@ -335,7 +335,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
 function removeAp(string) {
     const regex = /'/g;
     return string.replace(regex, "");
-  }
+}
 
 // router.get('/', verifyToken, async (req, res) => {
 

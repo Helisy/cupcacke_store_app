@@ -44,7 +44,7 @@ router.get('/', verifyToken, async (req, res) => {
         const [rows] = await db.execute(`select * from coupons;`);
         rows_1 = rows;
     }else{
-        var query = q.replaceAll("'", '"')
+        var query = removeAp(q);
         const [rows] = await db.execute(`select * from coupons where name = '${query}';`);
         rows_1 = rows;
     }
@@ -195,6 +195,11 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
         }
     );
 });
+
+function removeAp(string) {
+    const regex = /'/g;
+    return string.replace(regex, "");
+}
 
 
 module.exports = router;
