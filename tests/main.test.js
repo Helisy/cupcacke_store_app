@@ -1,8 +1,6 @@
 const request = require('supertest');
 const app = require('../index.js');
 
-const router = require('../src/routes/api/v1/coupon');
-
 const header_admin = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6MSwicm9sZSI6ImFkbWluIiwidmVyaWZpZWQiOjAsImlhdCI6MTY5OTk2NzUyN30.giLao0UCe3C945_o4xYjBQjMbNQC4TVekItmBS9tWLk"};
 const header_basic = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6Miwicm9sZSI6ImJhc2ljIiwidmVyaWZpZWQiOjAsImlhdCI6MTcwMDg1MzE0M30.bURKfoQlEnyFteYCbit9gh4N0EVKylkRjZP-SazVBB4"};
 
