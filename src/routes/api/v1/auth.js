@@ -61,7 +61,7 @@ router.post('/register', checkSchema(registerValidation), async (req, res) => {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -77,7 +77,7 @@ router.post('/register', checkSchema(registerValidation), async (req, res) => {
 
     const [rows_1] = await db.execute(`SELECT * FROM users WHERE email = '${email}'`)
 
-    if(rows_1.length) return res.json({
+    if(rows_1.length) return res.status(400).json({
         method: "POST",
         error: true,
         code: 400,
@@ -118,7 +118,7 @@ router.post('/login', async (req, res) => {
     let sql = `SELECT * FROM users WHERE email = '${email}'`;
     const [rows] = await db.execute(sql)
 
-    if(!rows.length) return res.json({
+    if(!rows.length) return res.status(400).json({
         method: "POST",
         error: true,
         code: 400,
@@ -168,33 +168,5 @@ router.post('/login', async (req, res) => {
         return;
     });
 });
-
-//Logs in the user
-router.post('/printer/login', async (req, res) => {
-    const {email, password} = req.body;
-
-    let sql = `SELECT * FROM users WHERE email = '${email}'`;
-    const [rows] = await db.execute(sql)
-
-    if(!rows.length) return res.status(400).json({error: "Usuário não encontrado"});
-
-    bcrypt.compare(password, rows[0]['password']).then((match) =>
-    {
-        if(!match) return res.status(400).json({error: "Senha incorreta"})
-
-        const acessToken = sign({
-            firstName: rows[0].first_name, 
-            lastName: rows[0].last_name,
-            userId: rows[0].id,
-            role: rows[0].role,
-            verified: rows[0].verified  
-        }, process.env.TOKEN_SECRETE);
-
-        res.status(200).json({user: {firstName: rows[0].first_name, token: acessToken}});
-        return;
-    });
-});
-
-
 
 module.exports = router;

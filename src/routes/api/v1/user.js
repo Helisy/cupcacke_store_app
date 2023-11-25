@@ -75,7 +75,7 @@ router.get('/cep/:id', param('id').isInt(), async (req, res) => {
 
     res.status(200).json(
         {
-            method: "POST",
+            method: "GET",
             error: false,
             code: 200,
             message: "",

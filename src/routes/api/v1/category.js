@@ -25,13 +25,11 @@ router.get('/', async (req, res) => {
         rows_1 = rows;
     }
 
-   
-
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: rows_1,
             links: [
@@ -53,7 +51,7 @@ router.get('/:id', param('id').isInt(), async (req, res) => {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "GET",
             error: true,
             code: 400,
@@ -69,11 +67,11 @@ router.get('/:id', param('id').isInt(), async (req, res) => {
 
     const [rows_1] = await db.execute(`select * from categories where id = ${id};`);
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: rows_1,
             links: [
@@ -113,7 +111,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,

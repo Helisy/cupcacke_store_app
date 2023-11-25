@@ -35,11 +35,11 @@ router.get('/', verifyToken, async (req, res) => {
         info[i].items = rows_2;
     }
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: info,
             links: [
@@ -66,11 +66,11 @@ router.get('/current', verifyToken, async (req, res) => {
         info[i].items = rows_2;
     }
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: info,
             links: [
@@ -128,11 +128,11 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
     const [rows_2] = await db.execute(`select * from orders_items where order_id = ${rows_1[0].id};`);
     info[0].items = rows_2;
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: info,
             links: [
@@ -158,7 +158,7 @@ router.post('/', verifyToken, checkSchema(crate_order_verification), async (req,
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,

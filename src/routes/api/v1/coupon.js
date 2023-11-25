@@ -51,11 +51,11 @@ router.get('/', verifyToken, async (req, res) => {
 
     
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: rows_1,
             links: [
@@ -93,11 +93,11 @@ router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
 
     const [rows_1] = await db.execute(`select * from coupons where id = ${id};`);
 
-    res.status(201).json(
+    res.status(200).json(
         {
             method: "GET",
             error: false,
-            code: 201,
+            code: 200,
             message: "",
             data: rows_1,
             links: [
@@ -137,7 +137,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -152,7 +152,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     }
 
     if(is_percentage && discount > 80){
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -167,7 +167,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     }
 
     if(!is_percentage && discount > minimum_value){
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
