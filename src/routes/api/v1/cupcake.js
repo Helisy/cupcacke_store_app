@@ -123,7 +123,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -160,7 +160,7 @@ router.get('/:id', param('id').isInt(), async (req, res) => {
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "GET",
             error: true,
             code: 400,
@@ -266,7 +266,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -283,7 +283,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
     const [rows_1] = await db.execute(`select id from reviews where cupcake_id = ${id} and user_id = ${req.user.userId};`);
 
     if(rows_1.length > 0){
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -301,7 +301,7 @@ router.post('/:id/review', verifyToken, param('id').isInt(), checkSchema(reviewV
     const [rows_2] = await db.execute(`select orders_items.* from orders_items join orders on order_id = orders.id where cupcake_id = ${id} and client_id = ${req.user.userId};`);
 
     if(rows_2.length < 1){
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,

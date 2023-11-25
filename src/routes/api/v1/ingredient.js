@@ -11,7 +11,7 @@ const db = database();
 const { verifyToken } = require('../../../middleware/authMiddleware');
 
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
 
     const [rows_1] = await db.execute(`select * from ingredients order by id desc`)
 
@@ -63,7 +63,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
 
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        return res.json({
+        return res.status(400).json({
             method: "POST",
             error: true,
             code: 400,
@@ -91,7 +91,7 @@ router.post('/', verifyToken, checkSchema(registerValidation), async (req, res) 
     );
 });
 
-router.get('/:id', verifyToken, param('id').isInt(), async (req, res) => {
+router.get('/:id', param('id').isInt(), async (req, res) => {
     const id = req.params.id;
 
     const result = validationResult(req);

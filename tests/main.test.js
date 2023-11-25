@@ -6,7 +6,7 @@ const router = require('../src/routes/api/v1/coupon');
 const header_admin = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6MSwicm9sZSI6ImFkbWluIiwidmVyaWZpZWQiOjAsImlhdCI6MTY5OTk2NzUyN30.giLao0UCe3C945_o4xYjBQjMbNQC4TVekItmBS9tWLk"};
 const header_basic = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6Miwicm9sZSI6ImJhc2ljIiwidmVyaWZpZWQiOjAsImlhdCI6MTcwMDg1MzE0M30.bURKfoQlEnyFteYCbit9gh4N0EVKylkRjZP-SazVBB4"};
 
-describe("/api/v1/auth/register", () => {
+describe("/api/v1/auth", () => {
     describe("Register new user", () => {
         test("POST /api/v1/auth/register - Without body - Should respond with status 400 and send body with details array", async () => {
             const res = await request(app).post("/api/v1/auth/register")
@@ -187,6 +187,213 @@ describe("/api/v1/coupon", () => {
                     "is_percentage": false,
                     "minimum_value": 500,
                     "expires_in": "2030-12-30 12:00:00"
+                }
+            ).set(header_basic);
+            expect(res.statusCode).toBe(401);
+            expect(res.body.details).toBeDefined();
+        });
+    });
+})
+
+describe("/api/v1/cupcake", () => {
+    describe("User isn't authenticated", () => {
+        test("GET /api/v1/cupcake - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?q=$query - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?cupcake=nutella")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?category=$category_id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?category=1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?dough=$dough_id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?dough=1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?filling=$filling_id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?filling=1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?cover=$cover_id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?cover=1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake?decoration=$decoration_id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake?decoration=1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake/:id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake/1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/cupcake/:id/review - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/cupcake/1/review")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+    });
+
+    describe("User is admin", () => {
+        test("POST /api/v1/cupcake - Without body - Should respond with status 400 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/cupcake").set(header_admin);
+            expect(res.statusCode).toBe(400);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/cupcake - With body - Should respond with status 201", async () => {
+            const res = await request(app).post("/api/v1/cupcake").send(
+                {
+                    "name" : "Cupcake de Baunilha",
+                    "cover_image": "https://www.teste.com/img_1.jpg",
+                    "description": "<p>Cupcake de Baunilha</p>",
+                    "category_id": 1,
+                    "dough_id": 4,
+                    "filling_id": 1,
+                    "cover_id": 2,
+                    "decoration_id": 3
+                }
+            ).set(header_admin);
+            expect(res.statusCode).toBe(201);
+        });
+
+        test("POST /api/v1/cupcake/:id/review - Without body - Should respond with status 401 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/cupcake/1/review").set(header_basic);
+            expect(res.statusCode).toBe(400);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/cupcake/:id/review - With body - Should respond with status 201", async () => {
+            const res = await request(app).post("/api/v1/cupcake/1/review").send(
+                {
+                    "review": "Cupcake muito gostoso."
+                }
+            ).set(header_basic);
+            expect(res.statusCode).toBe(201);
+        });
+    });
+
+    describe("User is not admin", () => {
+        test("POST /api/v1/cupcake - Without body - Should respond with status 401 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/cupcake").set(header_basic);
+            expect(res.statusCode).toBe(401);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/cupcake - With body - Should respond with status 401", async () => {
+            const res = await request(app).post("/api/v1/cupcake").send(
+                {
+                    "name" : "Cupcake de Baunilha",
+                    "cover_image": "https://www.teste.com/img_1.jpg",
+                    "description": "<p>Cupcake de Baunilha</p>",
+                    "category_id": 1,
+                    "dough_id": 4,
+                    "filling_id": 1,
+                    "cover_id": 2,
+                    "decoration_id": 3
+                }
+            ).set(header_basic);
+            expect(res.statusCode).toBe(401);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/cupcake/:id/review - Without body - Should respond with status 401 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/cupcake/1/review").set(header_basic);
+            expect(res.statusCode).toBe(400);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/cupcake/:id/review - With body - Should respond with status 201", async () => {
+            const res = await request(app).post("/api/v1/cupcake/1/review").send(
+                {
+                    "review": "Cupcake muito gostoso."
+                }
+            ).set(header_basic);
+            expect(res.statusCode).toBe(201);
+        });
+    });
+})
+
+
+describe("/api/v1/ingredient", () => {
+    describe("User isn't authenticated", () => {
+        test("GET /api/v1/ingredient - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/ingredient")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+
+        test("GET /api/v1/ingredient/:id - Should respond with status 200 and send body with data array", async () => {
+            const res = await request(app).get("/api/v1/ingredient/1")
+            expect(res.statusCode).toBe(200);
+            expect(res.body.data).toBeDefined();
+        });
+    });
+
+    describe("User is admin", () => {
+        test("POST /api/v1/ingredient - Without body - Should respond with status 400 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/ingredient").set(header_admin);
+            expect(res.statusCode).toBe(400);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/ingredient - With body - Should respond with status 201", async () => {
+            const res = await request(app).post("/api/v1/ingredient").send(
+                {
+                    "type": "decoration", 
+                    "name": "Raspas de Laranja", 
+                    "selling_price": 0.3,
+                    "cost_price": 0.1,
+                    "ingredients": "Açucar, corante, Laranja",
+                    "weight": 2,
+                    "contains_allergens": 0,
+                    "is_vegan": 1,
+                    "calories": 5,
+                    "nutritional_info": "Não contém alergênicos"
+                }
+            ).set(header_admin);
+            expect(res.statusCode).toBe(201);
+        });
+    });
+
+    describe("User is not admin", () => {
+        test("POST /api/v1/ingredient - Without body - Should respond with status 401 and send body with details array", async () => {
+            const res = await request(app).post("/api/v1/ingredient").set(header_basic);
+            expect(res.statusCode).toBe(401);
+            expect(res.body.details).toBeDefined();
+        });
+
+        test("POST /api/v1/ingredient - With body - Should respond with status 400", async () => {
+            const res = await request(app).post("/api/v1/ingredient").send(
+                {
+                    "type": "decoration", 
+                    "name": "Raspas de Laranja", 
+                    "selling_price": 0.3,
+                    "cost_price": 0.1,
+                    "ingredients": "Açucar, corante, Laranja",
+                    "weight": 2,
+                    "contains_allergens": 0,
+                    "is_vegan": 1,
+                    "calories": 5,
+                    "nutritional_info": "Não contém alergênicos"
                 }
             ).set(header_basic);
             expect(res.statusCode).toBe(401);
