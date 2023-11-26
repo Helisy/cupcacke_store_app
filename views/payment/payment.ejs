@@ -274,7 +274,7 @@
                     <i class="fa-solid fa-truck"></i></i><h3>Itens de Compra</h3>
                 </div>
                 <div id="cupom_field" class="cupom-field">
-                    <input type="text"><button>Adicionar</button>
+                    <input type="text" placeholder="Cupom"><button>Adicionar</button>
                 </div>
                 <div class="itens" id="item_content">
                     <!-- <h4>Itens Adicionados</h4>
@@ -456,7 +456,7 @@
                 item_content.innerHTML = `
                 <h4>Itens Adicionados</h4>
                 <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
-                <span><p>Grátis:</p><p>R$ 0,0</p></span>
+                <span><p>Entrega</p><p>R$ 0,0</p></span>
                 <div>
                     <p>${formatter.format(total)}</p>
                     <p>ou até 3x de ${formatter.format(total / 3)}</p>
@@ -479,7 +479,7 @@
             <h4>Itens Adicionados</h4>
             <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
             <span><p>Cupom:</p><p>- ${formatter.format(discValue)}</p></span>
-            <span><p>Grátis:</p><p>R$ 0,0</p></span>
+            <span><p>Entrega</p><p>R$ 0,0</p></span>
             <div>
                 <p>${formatter.format(total - discValue)}</p>
                 <p>ou até 3x de ${formatter.format(total / 3)}</p>
@@ -489,7 +489,7 @@
             item_content.innerHTML = `
             <h4>Itens Adicionados</h4>
             <span><p>Subtotal:</p><p>${formatter.format(total)}</p></span>
-            <span><p>Grátis:</p><p>R$ 0,0</p></span>
+            <span><p>Entrega</p><p>R$ 0,0</p></span>
             <div>
                 <p>${formatter.format(total)}</p>
                 <p>ou até 3x de ${formatter.format(total / 3)}</p>

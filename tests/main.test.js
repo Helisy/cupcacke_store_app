@@ -1,8 +1,8 @@
 const request = require('supertest');
 const app = require('../index.js');
-s
-const header_admin = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6MSwicm9sZSI6ImFkbWluIiwidmVyaWZpZWQiOjAsImlhdCI6MTY5OTk2NzUyN30.giLao0UCe3C945_o4xYjBQjMbNQC4TVekItmBS9tWLk"};
-const header_basic = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBkYSBTaWx2YSIsInVzZXJJZCI6Miwicm9sZSI6ImJhc2ljIiwidmVyaWZpZWQiOjAsImlhdCI6MTcwMDg1MzE0M30.bURKfoQlEnyFteYCbit9gh4N0EVKylkRjZP-SazVBB4"};
+
+const header_admin = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJHYWJyaWVsYSBFbGlzZSIsImxhc3ROYW1lIjoiRGlhcyBEYSBTaWx2YSIsInVzZXJJZCI6MSwicm9sZSI6ImFkbWluIiwidmVyaWZpZWQiOjAsImlhdCI6MTcwMDk0Mjg0MX0.Z1lB4z6jLCZw8MYjUj2DFK-5tALXNbuM9MTid_G1o8Y"};
+const header_basic = {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJUZXN0ZSBUZXN0ZSIsImxhc3ROYW1lIjoiVGVzdGUgVGVzdGUiLCJ1c2VySWQiOjIsInJvbGUiOiJiYXNpYyIsInZlcmlmaWVkIjowLCJpYXQiOjE3MDA5NDM4MjV9.lRAqUh_GqTFCiYsl46y-V3D_GJd3TLKLThN72GQqjV0"};
 
 describe("/api/v1/auth", () => {
     describe("Register new user", () => {
@@ -11,8 +11,6 @@ describe("/api/v1/auth", () => {
             expect(res.statusCode).toBe(400);
             expect(res.body.details).toBeDefined();
         });
-
-        //test with registred email
 
         test("POST /api/v1/auth/register - With body - Should respond with status 201", async () => {
             const res = await request(app).post("/api/v1/auth/register").send(
@@ -42,8 +40,8 @@ describe("/api/v1/auth", () => {
         test("POST /api/v1/auth/login - With body - Should respond with status 200 and a accessToken cooki", async () => {
             const res = await request(app).post("/api/v1/auth/login").send(
                 {
-                    "email": "helisy@user.com", 
-                    "password": "1338323"
+                    "email": "teste@test.com", 
+                    "password": "123456789"
                 }
             )
             expect(res.headers['set-cookie']).toBeDefined();
@@ -274,7 +272,7 @@ describe("/api/v1/cupcake", () => {
         });
 
         test("POST /api/v1/cupcake/:id/review - Without body - Should respond with status 401 and send body with details array", async () => {
-            const res = await request(app).post("/api/v1/cupcake/1/review").set(header_basic);
+            const res = await request(app).post("/api/v1/cupcake/1/review").set(header_admin);
             expect(res.statusCode).toBe(400);
             expect(res.body.details).toBeDefined();
         });
@@ -284,7 +282,7 @@ describe("/api/v1/cupcake", () => {
                 {
                     "review": "Cupcake muito gostoso."
                 }
-            ).set(header_basic);
+            ).set(header_admin);
             expect(res.statusCode).toBe(201);
         });
     });
