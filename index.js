@@ -78,11 +78,11 @@ app.get('/product/:id', checkToken, (req, res) => {
     res.render('product/product.ejs', {username: req.user?.firstName});
 });
 
-app.get('/category', validateToken, (req, res) => {
+app.get('/category', (req, res) => {
     res.redirect("/");
 });
 
-app.get('/category/:id', validateToken, (req, res) => {
+app.get('/category/:id', (req, res) => {
     res.render('category/category.ejs', {username: req.user?.firstName});
 });
 
